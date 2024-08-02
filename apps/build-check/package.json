@@ -1,0 +1,11 @@
+{
+    "name": "@new-tool/build-check",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "webpack serve --open",
+        "build": "webpack"
+    },
+    "dependencies": {
+        "@new-tool/erm-js": "^1.0.0"
+    }
+}

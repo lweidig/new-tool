@@ -1,0 +1,49 @@
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'index.js',
+        library: {
+            name: '@new-tool/erm-js',
+            type: 'umd',
+        },
+        globalObject: 'this',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                    },
+                },
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            esModule: true,
+                            modules: {
+                                namedExport: true,
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
+    },
+    plugins: [new MiniCssExtractPlugin()],
+    mode: 'production',
+    optimization: {
+        usedExports: true,
+    },
+};

@@ -42,6 +42,14 @@ module.exports = {
         ],
     },
     plugins: [new MiniCssExtractPlugin()],
+    resolve: {
+        alias: {
+            '@new-tool/erm-moddle/lib': path.resolve(
+                __dirname,
+                '../erm-moddle/dist/index.js',
+            ),
+        },
+    },
     mode: 'production',
     optimization: {
         usedExports: true,

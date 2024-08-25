@@ -1,0 +1,19 @@
+{
+    "name": "@new-tool/erm-moddle",
+    "version": "1.0.0",
+    "description": "moddle wrapper around new-tools ERM specification",
+    "type": "module",
+    "exports": {
+        ".": "./index.js"
+    },
+    "scripts": {
+        "build": "webpack",
+        "test": "mocha --recursive test"
+    },
+    "dependencies": {
+        "moddle": "7.0.0"
+    },
+    "babel": {
+        "extends": "../../.babelrc"
+    }
+}

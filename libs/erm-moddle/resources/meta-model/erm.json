@@ -1,0 +1,152 @@
+{
+    "name": "Entity Relationship Meta Model",
+    "uri": "http://erm",
+    "prefix": "erm",
+    "types": [
+        {
+            "name": "Root",
+            "properties": [
+                {
+                    "name": "cells",
+                    "type": "RootElement",
+                    "isMany": true
+                }
+            ]
+        },
+        {
+            "name": "RootElement",
+            "properties": []
+        },
+        {
+            "name": "ErmMetaElement",
+            "superClass": ["RootElement"],
+            "properties": []
+        },
+        {
+            "name": "ErmMetaLink",
+            "superClass": ["RootElement"],
+            "properties": []
+        },
+        {
+            "name": "ErmElement",
+            "superClass": ["RootElement"],
+            "properties": []
+        },
+        {
+            "name": "Entity",
+            "superClass": ["ErmElement"],
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "String",
+                    "isAttr": true,
+                    "default": "<Identifier>"
+                },
+                {
+                    "name": "attributes",
+                    "type": "Attribute",
+                    "isMany": true,
+                    "isReference": true
+                },
+                {
+                    "name": "dragOutAllowed",
+                    "type": "Boolean",
+                    "isAttr": false,
+                    "default": false
+                }
+            ]
+        },
+        {
+            "name": "Relationship",
+            "superClass": ["ErmElement"],
+            "properties": [
+                { "name": "name", "type": "String", "default": "<Name>" }
+            ]
+        },
+        {
+            "name": "Attribute",
+            "superClass": ["ErmElement"],
+            "properties": [
+                { "name": "id", "type": "String", "isAttr": true },
+                {
+                    "name": "name",
+                    "type": "String",
+                    "isAttr": true,
+                    "default": "<Name>"
+                },
+                {
+                    "name": "dataType",
+                    "type": "DataType",
+                    "isAttr": true
+                },
+                {
+                    "name": "dragOutAllowed",
+                    "type": "Boolean",
+                    "isAttr": false,
+                    "default": false
+                }
+            ]
+        },
+        {
+            "name": "Comment",
+            "superClass": ["ErmMetaElement"],
+            "properties": [
+                { "name": "id", "type": "String", "isAttr": true },
+                {
+                    "name": "text",
+                    "type": "String",
+                    "isAttr": true,
+                    "default": "<Comment>"
+                }
+            ]
+        },
+        {
+            "name": "Constraint",
+            "superClass": ["ErmMetaElement"],
+            "properties": []
+        },
+        {
+            "name": "Generalization",
+            "superClass": ["ErmElement"],
+            "properties": []
+        },
+        {
+            "name": "DisjunctGeneralization",
+            "superClass": ["Generalization"],
+            "properties": []
+        },
+        {
+            "name": "OverlappingGeneralization",
+            "superClass": ["Generalization"],
+            "properties": []
+        },
+        {
+            "name": "Association",
+            "superClass": ["ErmMetaLink"],
+            "properties": []
+        },
+        {
+            "name": "NoteLink",
+            "superClass": ["ErmMetaLink"],
+            "properties": []
+        },
+        {
+            "name": "SubsetLink",
+            "superClass": ["ErmMetaLink"],
+            "properties": []
+        }
+    ],
+    "enumerations": [
+        {
+            "name": "DataType",
+            "literalValues": [
+                { "name": "String" },
+                { "name": "Boolean" },
+                { "name": "Timestamp" },
+                { "name": "Decimal" },
+                { "name": "Integer" },
+                { "name": "Date" }
+            ]
+        }
+    ]
+}

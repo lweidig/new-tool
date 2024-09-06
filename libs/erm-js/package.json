@@ -4,12 +4,13 @@
     "description": "An ERM toolkit and web modeler",
     "scripts": {
         "build": "webpack",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "karma start"
     },
     "dependencies": {
+        "@new-tool/erm-moddle": "^1.0.0",
         "diagram-js": "14.9.0"
     },
     "babel": {
-        "extends": "../../.babelrc"
+        "extends": "../../babel.config.json"
     }
 }

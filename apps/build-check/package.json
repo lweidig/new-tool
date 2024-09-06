@@ -9,6 +9,6 @@
         "@new-tool/erm-js": "^1.0.0"
     },
     "babel": {
-        "extends": "../../.babelrc"
+        "extends": "../../babel.config.json"
     }
 }

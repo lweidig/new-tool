@@ -18,5 +18,25 @@ export default [
         },
     },
     js.configs.recommended,
-    { ignores: ['**/dist/**', '**/webpack.config.js'] },
+    {
+        ignores: ['**/dist/**'],
+    },
+    {
+        files: ['**/karma.conf.js', '**/webpack.config.js'],
+        languageOptions: {
+            globals: {
+                ...globals.node,
+            },
+        },
+    },
+    {
+        files: ['**/test/**'],
+        languageOptions: {
+            globals: {
+                ...globals.mocha,
+                expect: 'readonly',
+                sinon: 'readonly',
+            },
+        },
+    },
 ];

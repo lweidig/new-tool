@@ -1,7 +1,6 @@
-import ErmRenderer from './ErmRenderer';
-import TextRenderer from './TextRenderer';
-
-import PathMap from './PathMap';
+import ErmRenderer from './ErmRenderer.js';
+import TextRenderer from './TextRenderer.js';
+import PathMap from './PathMap.js';
 
 export default {
     __init__: ['ermRenderer'],

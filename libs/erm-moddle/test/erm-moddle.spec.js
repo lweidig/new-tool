@@ -9,7 +9,7 @@ describe('erm-moddle', function () {
         it('should expose erm-moddle types and descriptors', function () {
             const ermTypes = [
                 'Root',
-                'RootElement',
+                'BaseElement',
                 'ErmMetaElement',
                 'ErmMetaLink',
                 'ErmElement',

@@ -8,28 +8,28 @@
             "properties": [
                 {
                     "name": "cells",
-                    "type": "RootElement",
+                    "type": "BaseElement",
                     "isMany": true
                 }
             ]
         },
         {
-            "name": "RootElement",
+            "name": "BaseElement",
             "properties": []
         },
         {
             "name": "ErmMetaElement",
-            "superClass": ["RootElement"],
+            "superClass": ["BaseElement"],
             "properties": []
         },
         {
             "name": "ErmMetaLink",
-            "superClass": ["RootElement"],
+            "superClass": ["BaseElement"],
             "properties": []
         },
         {
             "name": "ErmElement",
-            "superClass": ["RootElement"],
+            "superClass": ["BaseElement"],
             "properties": []
         },
         {

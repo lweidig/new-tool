@@ -32,17 +32,19 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
-                            esModule: true,
-                            modules: {
-                                namedExport: true,
-                            },
+                            esModule: false,
+                            modules: false,
                         },
                     },
                 ],
             },
         ],
     },
-    plugins: [new MiniCssExtractPlugin()],
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'erm-js.css',
+        }),
+    ],
     resolve: {
         alias: {
             '@new-tool/erm-moddle/lib': path.resolve(

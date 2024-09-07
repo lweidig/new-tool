@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const fs = require('fs');
 
@@ -31,18 +30,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            esModule: true,
-                            modules: {
-                                namedExport: true,
-                            },
-                        },
-                    },
-                ],
+                use: ['style-loader', 'css-loader'],
             },
         ],
     },
@@ -51,9 +39,14 @@ module.exports = {
             template: './src/index.html',
             jsonFiles: jsonFiles,
         }),
-        new MiniCssExtractPlugin(),
         new CopyWebpackPlugin({
-            patterns: [{ from: 'resources', to: 'resources' }],
+            patterns: [
+                { from: 'resources', to: 'resources' },
+                {
+                    from: '../../libs/erm-js/dist/erm-js.css',
+                    to: 'styles/erm-js.css',
+                },
+            ],
         }),
     ],
     resolve: {
@@ -61,10 +54,6 @@ module.exports = {
             '@new-tool/erm-js/lib': path.resolve(
                 __dirname,
                 '../../libs/erm-js/dist/index.js',
-            ),
-            '@new-tool/erm-js/styles': path.resolve(
-                __dirname,
-                '../../libs/erm-js/dist/main.css',
             ),
         },
     },
@@ -74,6 +63,9 @@ module.exports = {
         },
         compress: true,
         port: 8080,
+        devMiddleware: {
+            writeToDisk: true,
+        },
     },
     mode: 'development',
 };

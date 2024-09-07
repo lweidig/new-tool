@@ -4,11 +4,27 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>erm-js build check</title>
+        <style type="text/css">
+            html,
+            body,
+            #viewer-container,
+            #viewer-container > div {
+                height: 100%;
+            }
+            #viewer-container {
+                width: 99%;
+                height: 85%;
+                margin: 20px auto;
+                background-color: #ba2b2b;
+                border: 1px solid #463535;
+            }
+        </style>
+        <link rel="stylesheet" href="styles/erm-js.css" />
     </head>
     <body>
         <div id="json-selector">
             <label for="json-select"
-                >Choose an ERM diagran file to get started:</label
+                >Choose an ERM diagram file to get started:</label
             >
             <select id="json-select">
                 <% htmlWebpackPlugin.options.jsonFiles.forEach(function(file) {

@@ -1,5 +1,3 @@
-import './index.css';
-import '@new-tool/erm-js/styles';
 import Viewer from '@new-tool/erm-js/lib';
 
 let viewer;
@@ -13,7 +11,7 @@ async function loadAndRenderDiagram(jsonFileName) {
             viewer.clear();
         } else {
             viewer = new Viewer({
-                container: document.querySelector('#viewer-container'),
+                container: '#viewer-container',
             });
         }
 

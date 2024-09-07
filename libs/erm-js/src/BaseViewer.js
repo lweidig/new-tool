@@ -88,7 +88,9 @@ BaseViewer.prototype.importJson = async function importJson(json) {
                 }),
             ) || erDiagramSpecification;
 
-        const importResult = await this.importErDiagramSpecification(erDiagramSpecification);
+        const importResult = await this.importErDiagramSpecification(
+            erDiagramSpecification,
+        );
 
         aggregatedWarnings = aggregatedWarnings.concat(importResult.warnings);
 
@@ -244,7 +246,9 @@ BaseViewer.prototype.getErDiagramSpecification = function () {
 /**
  * Set the currently imported erDiagramSpecification of the viewer
  */
-BaseViewer.prototype._setErDiagramSpecification = function (erDiagramSpecification) {
+BaseViewer.prototype._setErDiagramSpecification = function (
+    erDiagramSpecification,
+) {
     this._erDiagramSpecification = erDiagramSpecification;
 };
 

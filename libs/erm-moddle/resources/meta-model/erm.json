@@ -9,7 +9,8 @@
                 {
                     "name": "cells",
                     "type": "BaseElement",
-                    "isMany": true
+                    "isMany": true,
+                    "default": []
                 }
             ]
         },
@@ -123,7 +124,25 @@
         {
             "name": "Association",
             "superClass": ["ErmMetaLink"],
-            "properties": []
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "String",
+                    "isAttr": true
+                },
+                {
+                    "name": "sourceRef",
+                    "type": "ErmElement",
+                    "isReference": true,
+                    "isAttr": true
+                },
+                {
+                    "name": "targetRef",
+                    "type": "ErmElement",
+                    "isReference": true,
+                    "isAttr": true
+                }
+            ]
         },
         {
             "name": "NoteLink",

@@ -1,0 +1,34 @@
+{
+    "id": "root1",
+    "cells": [
+        {
+            "$type": "erm:Entity",
+            "id": "entity1",
+            "name": "Kunde",
+            "attributes": []
+        },
+        {
+            "$type": "erm:Entity",
+            "id": "entity2",
+            "name": "Produkt",
+            "attributes": []
+        },
+        {
+            "$type": "erm:Relationship",
+            "id": "relationship1",
+            "name": "kauft"
+        },
+        {
+            "$type": "erm:Association",
+            "id": "association1",
+            "sourceRef": "entity1",
+            "targetRef": "relationship1"
+        },
+        {
+            "$type": "erm:Association",
+            "id": "association2",
+            "sourceRef": "relationship1",
+            "targetRef": "entity2"
+        }
+    ]
+}

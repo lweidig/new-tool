@@ -1,24 +1,38 @@
-// global Editor
 import './index.css';
 import '@new-tool/erm-js/styles';
-import ErmViewer from '@new-tool/erm-js/lib';
-import carRentalJson from '../resources/car-rental.json';
+import Viewer from '@new-tool/erm-js/lib';
 
-const viewer = new ErmViewer({
-    container: document.querySelector('#viewer-container'),
-});
+let viewer;
 
-viewer
-    .importJson(carRentalJson)
-    .then(function (result) {
-        const { warnings } = result;
+async function loadAndRenderDiagram(jsonFileName) {
+    try {
+        const response = await fetch(`resources/${jsonFileName}`);
+        const jsonString = await response.text();
 
-        console.log('success !', warnings);
+        if (viewer) {
+            viewer.clear();
+        } else {
+            viewer = new Viewer({
+                container: document.querySelector('#viewer-container'),
+            });
+        }
 
+        const result = await viewer.importJson(jsonString);
+        console.log('success !', result.warnings);
         viewer.get('canvas').zoom('fit-viewport');
-    })
-    .catch(function (err) {
-        const { warnings, message } = err;
+    } catch (err) {
+        console.log('something went wrong:', err.warnings, err.message);
+    }
+}
 
-        console.log('something went wrong:', warnings, message);
+document.addEventListener('DOMContentLoaded', () => {
+    const selectElement = document.getElementById('json-select');
+
+    selectElement.addEventListener('change', (event) => {
+        loadAndRenderDiagram(event.target.value);
     });
+
+    if (selectElement.options.length > 0) {
+        loadAndRenderDiagram(selectElement.options[0].value);
+    }
+});

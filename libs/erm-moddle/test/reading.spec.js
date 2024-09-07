@@ -30,7 +30,7 @@ describe('erm-moddle reading', function () {
         expect(result.cells).to.be.an('array');
         expect(result.cells).to.have.length(5);
         expect(result.cells[0].$type).to.equal('erm:Entity');
-        expect(result.cells[0].name).to.equal('Kunde');
+        expect(result.cells[0].name).to.equal('Customer');
         for (const cell of result.cells) {
             expect(cell.$instanceOf('erm:BaseElement')).to.be.true;
         }
@@ -57,19 +57,20 @@ describe('erm-moddle reading', function () {
         const moddleFromJsonWithMissingRootElement = () =>
             moddle.fromJson(jsonString);
 
-        await expect(moddleFromJsonWithMissingRootElement()).to.be.rejectedWith(
+        return expect(
+            moddleFromJsonWithMissingRootElement(),
+        ).to.be.rejectedWith(
             Error,
-            'Could not find root element',
+            'Could not find root element. Please provide a valid ERM JSON string.',
         );
     });
 
     it('should reject not parseable string', async function () {
         const jsonString = 'invalid json';
 
-        const moddleFromJsonWithMissingRootElement = () =>
-            moddle.fromJson(jsonString);
+        const moddleFromInvalidJson = () => moddle.fromJson(jsonString);
 
-        await expect(moddleFromJsonWithMissingRootElement()).to.be.rejectedWith(
+        return expect(moddleFromInvalidJson()).to.be.rejectedWith(
             Error,
             'Unexpected token \'i\', "invalid json" is not valid JSON',
         );

@@ -1,13 +1,20 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const fs = require('fs');
+
+const resourcesPath = path.resolve(__dirname, 'resources');
+const jsonFiles = fs
+    .readdirSync(resourcesPath)
+    .filter((file) => file.endsWith('.json'));
 
 module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '/', // Ensure assets are served from the correct path
+        publicPath: '/',
     },
     module: {
         rules: [
@@ -42,8 +49,12 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
+            jsonFiles: jsonFiles,
         }),
         new MiniCssExtractPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [{ from: 'resources', to: 'resources' }],
+        }),
     ],
     resolve: {
         alias: {

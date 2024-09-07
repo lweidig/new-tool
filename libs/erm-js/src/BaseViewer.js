@@ -47,20 +47,14 @@ inherits(BaseViewer, Diagram);
  * This method handles the entire import process, including parsing,
  * error handling, and event emission.
  */
-BaseViewer.prototype.importJson = async function importJson(json) {
-    const self = this;
-
-    function ParseCompleteEvent(data) {
-        return self.get('eventBus').createEvent(data);
-    }
-
+BaseViewer.prototype.importJson = async function importJson(jsonString) {
     let aggregatedWarnings = [];
     try {
-        json = this._emit('import.parse.start', { json: json }) || json;
+        this._emit('import.parse.start', { json: jsonString });
 
-        let parseResult;
+        let modelInstance;
         try {
-            parseResult = await this._moddle.fromJson(json, 'erm:Root');
+            modelInstance = await this._moddle.fromJson(jsonString);
         } catch (error) {
             this._emit('import.parse.complete', {
                 error,
@@ -69,28 +63,8 @@ BaseViewer.prototype.importJson = async function importJson(json) {
             throw error;
         }
 
-        let erDiagramSpecification = parseResult.rootElement;
-        const references = parseResult.references;
-        const parseWarnings = parseResult.warnings;
-        const elementsById = parseResult.elementsById;
-
-        aggregatedWarnings = aggregatedWarnings.concat(parseWarnings);
-
-        erDiagramSpecification =
-            this._emit(
-                'import.parse.complete',
-                ParseCompleteEvent({
-                    error: null,
-                    specification: erDiagramSpecification,
-                    elementsById: elementsById,
-                    references: references,
-                    warnings: aggregatedWarnings,
-                }),
-            ) || erDiagramSpecification;
-
-        const importResult = await this.importErDiagramSpecification(
-            erDiagramSpecification,
-        );
+        const importResult =
+            await this.importErDiagramSpecification(modelInstance);
 
         aggregatedWarnings = aggregatedWarnings.concat(importResult.warnings);
 
@@ -133,10 +107,10 @@ BaseViewer.prototype.importErDiagramSpecification =
  * Open a specific diagram from an existing erDiagramSpecification
  */
 BaseViewer.prototype.open = async function open() {
-    const erDiagramSpecification = this._erDiagramSpecification;
+    const erDiagramSpecification = this.getErDiagramSpecification();
 
     if (!erDiagramSpecification) {
-        const error = new Error('no JSON imported');
+        const error = new Error('no JSON imported'); // why are we here???
         enrichErrorWithWarnings(error, []);
 
         throw error;
@@ -240,7 +214,7 @@ BaseViewer.prototype.saveSVG = async function saveSVG() {
  * Get the currently imported erDiagramSpecification of the viewer
  */
 BaseViewer.prototype.getErDiagramSpecification = function () {
-    return this._definitions;
+    return this._erDiagramSpecification;
 };
 
 /**

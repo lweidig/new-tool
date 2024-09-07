@@ -1,10 +1,22 @@
+<!doctype html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <title>Build Check</title>
+        <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>erm-js build check</title>
     </head>
     <body>
+        <div id="json-selector">
+            <label for="json-select"
+                >Choose an ERM diagran file to get started:</label
+            >
+            <select id="json-select">
+                <% htmlWebpackPlugin.options.jsonFiles.forEach(function(file) {
+                %>
+                <option value="<%= file %>"><%= file %></option>
+                <% }); %>
+            </select>
+        </div>
         <div id="viewer-container"></div>
     </body>
 </html>

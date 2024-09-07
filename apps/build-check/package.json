@@ -2,7 +2,7 @@
     "name": "@new-tool/build-check",
     "version": "1.0.0",
     "scripts": {
-        "start": "webpack serve --open",
+        "start": "webpack serve",
         "build": "webpack"
     },
     "dependencies": {

@@ -8,7 +8,7 @@ const spy = sinon.spy;
 describe('BaseViewer', function () {
     it('should instantiate', function () {
         // when
-        var instance = new BaseViewer();
+        const instance = new BaseViewer();
 
         // then
         expect(instance.importJson).to.exist;
@@ -47,7 +47,7 @@ describe('BaseViewer', function () {
             inherits(SpecialViewer, BaseViewer);
 
             // when
-            var instance = new SpecialViewer(options);
+            const instance = new SpecialViewer(options);
 
             // then
             expect(instance.getModules).to.have.been.calledOnce;

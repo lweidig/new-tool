@@ -34,36 +34,103 @@ export function importErmDiagram(targetDiagram, ermRoot) {
     let importer;
     let eventBus;
     let canvas;
-    let error;
+    let elementRegistry;
     let warnings = [];
 
     const render = (ermRoot) => {
-        console.log('ermRoot', ermRoot);
-        // TODO: implement rendering
+        const elementFactory = importer._elementFactory;
+        elementRegistry = importer._elementRegistry;
+        const parentElement = canvas._container || canvas._svg;
+        const middleX = parentElement.clientWidth / 2;
+        const middleY = parentElement.clientHeight / 2;
+
+        const radius = Math.min(middleX, middleY) * 0.8;
+        const shapes = ermRoot.cells.filter(
+            (cell) =>
+                cell.$instanceOf('erm:ErmElement') ||
+                cell.$instanceOf('erm:ErmMetaElement'),
+        );
+
+        if (shapes.length === 0) {
+            warnings.push(
+                'no cells defined inside provided erm:Root - id: ' + ermRoot.id,
+            );
+            return;
+        }
+
+        const connections = ermRoot.cells.filter((cell) =>
+            cell.$instanceOf('erm:ErmMetaLink'),
+        );
+
+        shapes.forEach((shape, index) => {
+            const angle = (index / shapes.length) * 2 * Math.PI;
+            const x = middleX + radius * Math.cos(angle) - 50;
+            const y = middleY + radius * Math.sin(angle) - 40;
+
+            const newShape = elementFactory.createShape({
+                type: shape.$type,
+                businessObject: shape,
+                x: x,
+                y: y,
+                width: 100,
+                height: 80,
+                name: shape.name || shape.$type,
+            });
+            newShape.id = shape.id;
+            eventBus.fire('ermElement.added', { element: newShape });
+            canvas.addShape(newShape);
+        });
+        connections.forEach((connection) => {
+            const sourceShape = elementRegistry.get(connection.sourceRef);
+            const targetShape = elementRegistry.get(connection.targetRef);
+
+            if (sourceShape && targetShape) {
+                const newConnection = elementFactory.createConnection({
+                    type: connection.$type,
+                    businessObject: connection,
+                    source: sourceShape,
+                    target: targetShape,
+                    waypoints: [
+                        {
+                            x: sourceShape.x + sourceShape.width / 2,
+                            y: sourceShape.y + sourceShape.height / 2,
+                        },
+                        {
+                            x: targetShape.x + targetShape.width / 2,
+                            y: targetShape.y + targetShape.height / 2,
+                        },
+                    ],
+                });
+                newConnection.id = connection.id;
+                newConnection.name =
+                    connection.name ||
+                    `${sourceShape.name} -> ${targetShape.name}`;
+                eventBus.fire('ermElement.added', {
+                    element: newConnection,
+                });
+                canvas.addConnection(newConnection);
+            } else {
+                const missingElement = !sourceShape ? 'source' : 'target';
+                warnings.push(
+                    'Could not add Connection: '
+                        .concat(missingElement)
+                        .concat(' element not found - id: ')
+                        .concat(connection[missingElement + 'Ref']),
+                );
+            }
+        });
     };
 
-    return new Promise((resolve, reject) => {
-        try {
-            importer = targetDiagram.get('ermImporter');
-            eventBus = targetDiagram.get('eventBus');
-            canvas = targetDiagram.get('canvas');
-
-            console.log('importer', importer);
-            console.log('canvas', canvas);
-
-            eventBus.fire('import.render.start', { definitions: ermRoot });
-
-            render(ermRoot);
-
-            eventBus.fire('import.render.complete', {
-                error: error,
-                warnings: warnings,
-            });
-
-            return resolve({ warnings: warnings });
-        } catch (e) {
-            e.warnings = warnings;
-            return reject(e);
-        }
-    });
+    try {
+        importer = targetDiagram.get('ermImporter');
+        eventBus = targetDiagram.get('eventBus');
+        canvas = targetDiagram.get('canvas');
+        eventBus.fire('import.render.start', { definitions: ermRoot });
+        render(ermRoot);
+        eventBus.fire('import.render.complete', { warnings: warnings });
+        return Promise.resolve({ warnings: warnings });
+    } catch (e) {
+        e.warnings = warnings;
+        return Promise.reject(e);
+    }
 }

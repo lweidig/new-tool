@@ -2,7 +2,7 @@
  * Checks if the given element is of the provided type.
  */
 export function is(element, type) {
-    var bo = getBusinessObject(element);
+    const bo = getBusinessObject(element);
 
     return bo && typeof bo.$instanceOf === 'function' && bo.$instanceOf(type);
 }

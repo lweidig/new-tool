@@ -1,4 +1,4 @@
-import TextUtil from 'diagram-js/lib/util/Text.js';
+import TextUtil from 'diagram-js/lib/util/Text';
 
 const DEFAULT_FONT_SIZE = 12;
 const LINE_HEIGHT_RATIO = 1.2;
@@ -21,8 +21,25 @@ export default function TextRenderer(config) {
         style: defaultStyle,
     });
 
-    this.createText = (text, options = {}) => {
-        return textUtil.createText(text, options);
+    /**
+     * Create a layouted text element.
+     *
+     * @param {string} text
+     * @param {TextLayoutConfig} [options]
+     *
+     * @return {SVGElement} rendered text
+     */
+    this.createText = function (text, options) {
+        const svgElement = textUtil.createText(text, options || {});
+        svgElement.setAttribute('text-anchor', 'middle');
+        return svgElement;
+    };
+
+    /**
+     * Get default text style.
+     */
+    this.getDefaultStyle = function () {
+        return defaultStyle;
     };
 }
 

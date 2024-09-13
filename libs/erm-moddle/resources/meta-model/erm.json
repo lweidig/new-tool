@@ -7,6 +7,12 @@
             "name": "Root",
             "properties": [
                 {
+                    "name": "id",
+                    "type": "String",
+                    "isAttr": true,
+                    "isId": true
+                },
+                {
                     "name": "cells",
                     "type": "BaseElement",
                     "isMany": true,
@@ -16,7 +22,14 @@
         },
         {
             "name": "BaseElement",
-            "properties": []
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "String",
+                    "isAttr": true,
+                    "isId": true
+                }
+            ]
         },
         {
             "name": "ErmMetaElement",
@@ -68,7 +81,6 @@
             "name": "Attribute",
             "superClass": ["ErmElement"],
             "properties": [
-                { "name": "id", "type": "String", "isAttr": true },
                 {
                     "name": "name",
                     "type": "String",
@@ -92,7 +104,6 @@
             "name": "Comment",
             "superClass": ["ErmMetaElement"],
             "properties": [
-                { "name": "id", "type": "String", "isAttr": true },
                 {
                     "name": "text",
                     "type": "String",
@@ -125,11 +136,6 @@
             "name": "Association",
             "superClass": ["ErmMetaLink"],
             "properties": [
-                {
-                    "name": "id",
-                    "type": "String",
-                    "isAttr": true
-                },
                 {
                     "name": "sourceRef",
                     "type": "ErmElement",

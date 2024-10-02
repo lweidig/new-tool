@@ -5,7 +5,7 @@
 Before you begin, ensure you have met the following requirements:
 
 -   You have installed [Node.js](https://nodejs.org/) (version 20.x or later).
--   You have installed [npm](https://www.npmjs.com/) (version 10.x or later).
+-   You have installed [npm](https://github.com/npm/cli) (version 10.x or later).
 
 ## Installation
 

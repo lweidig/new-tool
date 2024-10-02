@@ -34,7 +34,8 @@ describe('draw - ErmRenderer', function () {
         const relationshipElement = elementRegistry.get('relationship1');
 
         // when
-        const relationshipGfx = elementRegistry.getGraphics(relationshipElement);
+        const relationshipGfx =
+            elementRegistry.getGraphics(relationshipElement);
 
         // then
         const visual = domQuery('.djs-visual', relationshipGfx);

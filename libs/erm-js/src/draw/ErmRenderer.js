@@ -96,13 +96,7 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
             );
             break;
         case 'erm:Comment':
-            renderedShape = renderComment(
-                visuals,
-                element,
-                this.FRAME_STYLE,
-                this.SHAPE_STYLE,
-                attrs,
-            );
+            renderedShape = renderComment(visuals, element, attrs);
             break;
         case 'erm:Constraint':
             renderedShape = renderConstraint(
@@ -163,6 +157,7 @@ ErmRenderer.prototype.drawConnection = function (visuals, connection, attrs) {
 };
 
 ErmRenderer.prototype.getShapePath = function getShapePath(shape) {
+    console.warn('getShapePath called for', shape);
     const width = shape.width;
     const shapePath = [
         ['M', shape.x, shape.y],
@@ -177,6 +172,7 @@ ErmRenderer.prototype.getShapePath = function getShapePath(shape) {
 ErmRenderer.prototype.getConnectionPath = function getConnectionPath(
     connection,
 ) {
+    console.warn('getConnectionPath called for', connection);
     const waypoints = connection.waypoints;
     const connectionPath = [];
     let point;

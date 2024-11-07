@@ -13,6 +13,7 @@ describe('erm-moddle', function () {
                 'ErmMetaElement',
                 'ErmMetaLink',
                 'ErmElement',
+                'ErmChildElement',
                 'Entity',
                 'Relationship',
                 'Attribute',
@@ -127,7 +128,6 @@ describe('erm-moddle', function () {
                 const entity = moddle.create('erm:Entity');
 
                 expect(entity.name).to.eql('<Identifier>');
-                expect(entity.dragOutAllowed).to.be.false;
             });
 
             it('should init Relationship', function () {
@@ -140,7 +140,6 @@ describe('erm-moddle', function () {
                 const attribute = moddle.create('erm:Attribute');
 
                 expect(attribute.name).to.eql('<Name>');
-                expect(attribute.dragOutAllowed).to.be.false;
             });
 
             it('should init Comment', function () {
@@ -150,6 +149,7 @@ describe('erm-moddle', function () {
             });
         });
     });
+
     describe('getting and setting properties', function () {
         it('should set id attribute', function () {
             const comment = moddle.create('erm:Comment');

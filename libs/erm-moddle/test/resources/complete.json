@@ -1,0 +1,130 @@
+{
+    "$type": "erm:Root",
+    "id": "root1",
+    "cells": [
+        {
+            "$type": "erm:Entity",
+            "id": "person",
+            "name": "Person",
+            "attributes": [
+                {
+                    "$type": "erm:Attribute",
+                    "id": "personId",
+                    "name": "PersonID",
+                    "dataType": "Integer"
+                },
+                {
+                    "$type": "erm:Attribute",
+                    "id": "birthday",
+                    "name": "Birthday",
+                    "dataType": "Date"
+                },
+                {
+                    "$type": "erm:Attribute",
+                    "id": "active",
+                    "name": "IsActive",
+                    "dataType": "Boolean"
+                },
+                {
+                    "$type": "erm:Attribute",
+                    "id": "salary",
+                    "name": "Salary",
+                    "dataType": "Decimal"
+                }
+            ]
+        },
+        {
+            "$type": "erm:Entity",
+            "id": "employee",
+            "name": "Employee",
+            "attributes": [
+                {
+                    "$type": "erm:Attribute",
+                    "id": "employeeId",
+                    "name": "EmployeeID",
+                    "dataType": "Integer"
+                }
+            ]
+        },
+        {
+            "$type": "erm:Entity",
+            "id": "manager",
+            "name": "Manager",
+            "attributes": [
+                {
+                    "$type": "erm:Attribute",
+                    "id": "managerId",
+                    "name": "ManagerID",
+                    "dataType": "Integer"
+                }
+            ]
+        },
+
+        {
+            "$type": "erm:Relationship",
+            "id": "employment",
+            "name": "Employment"
+        },
+
+        {
+            "$type": "erm:DisjunctGeneralization",
+            "id": "disjunctGen1"
+        },
+
+        {
+            "$type": "erm:OverlappingGeneralization",
+            "id": "overlapGen1"
+        },
+
+        {
+            "$type": "erm:Comment",
+            "id": "comment1",
+            "text": "Hierarchische Personenverwaltung"
+        },
+
+        {
+            "$type": "erm:Constraint",
+            "id": "constraint1"
+        },
+
+        {
+            "$type": "erm:Association",
+            "id": "assoc1",
+            "sourceRef": "person",
+            "targetRef": "employment"
+        },
+        {
+            "$type": "erm:Association",
+            "id": "assoc2",
+            "sourceRef": "employment",
+            "targetRef": "employee"
+        },
+
+        {
+            "$type": "erm:Association",
+            "id": "assoc3",
+            "sourceRef": "employee",
+            "targetRef": "disjunctGen1"
+        },
+        {
+            "$type": "erm:Association",
+            "id": "assoc4",
+            "sourceRef": "disjunctGen1",
+            "targetRef": "person"
+        },
+
+        {
+            "$type": "erm:NoteLink",
+            "id": "noteLink1",
+            "sourceRef": "comment1",
+            "targetRef": "person"
+        },
+
+        {
+            "$type": "erm:SubsetLink",
+            "id": "subsetLink1",
+            "sourceRef": "manager",
+            "targetRef": "employee"
+        }
+    ]
+}

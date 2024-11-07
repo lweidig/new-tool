@@ -47,6 +47,11 @@
             "properties": []
         },
         {
+            "name": "ErmChildElement",
+            "superClass": ["BaseElement"],
+            "properties": []
+        },
+        {
             "name": "Entity",
             "superClass": ["ErmElement"],
             "properties": [
@@ -59,27 +64,13 @@
                 {
                     "name": "attributes",
                     "type": "Attribute",
-                    "isMany": true,
-                    "isReference": true
-                },
-                {
-                    "name": "dragOutAllowed",
-                    "type": "Boolean",
-                    "isAttr": false,
-                    "default": false
+                    "isMany": true
                 }
             ]
         },
         {
-            "name": "Relationship",
-            "superClass": ["ErmElement"],
-            "properties": [
-                { "name": "name", "type": "String", "default": "<Name>" }
-            ]
-        },
-        {
             "name": "Attribute",
-            "superClass": ["ErmElement"],
+            "superClass": ["ErmChildElement"],
             "properties": [
                 {
                     "name": "name",
@@ -91,13 +82,14 @@
                     "name": "dataType",
                     "type": "DataType",
                     "isAttr": true
-                },
-                {
-                    "name": "dragOutAllowed",
-                    "type": "Boolean",
-                    "isAttr": false,
-                    "default": false
                 }
+            ]
+        },
+        {
+            "name": "Relationship",
+            "superClass": ["ErmElement"],
+            "properties": [
+                { "name": "name", "type": "String", "default": "<Name>" }
             ]
         },
         {
@@ -153,12 +145,38 @@
         {
             "name": "NoteLink",
             "superClass": ["ErmMetaLink"],
-            "properties": []
+            "properties": [
+                {
+                    "name": "sourceRef",
+                    "type": "ErmMetaElement",
+                    "isReference": true,
+                    "isAttr": true
+                },
+                {
+                    "name": "targetRef",
+                    "type": "BaseElement",
+                    "isReference": true,
+                    "isAttr": true
+                }
+            ]
         },
         {
             "name": "SubsetLink",
             "superClass": ["ErmMetaLink"],
-            "properties": []
+            "properties": [
+                {
+                    "name": "sourceRef",
+                    "type": "ErmElement",
+                    "isReference": true,
+                    "isAttr": true
+                },
+                {
+                    "name": "targetRef",
+                    "type": "ErmElement",
+                    "isReference": true,
+                    "isAttr": true
+                }
+            ]
         }
     ],
     "enumerations": [

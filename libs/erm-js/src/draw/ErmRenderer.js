@@ -1,14 +1,15 @@
-import { is } from '../shared/ModelUtil';
-import { createLine } from 'diagram-js/lib/util/RenderUtil';
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
-import {
-    append as svgAppend,
-    attr as svgAttr,
-    create as svgCreate,
-    classes as svgClasses,
-} from 'tiny-svg';
-
+import { componentsToPath } from 'diagram-js/lib/util/RenderUtil';
 import inherits from 'inherits-browser';
+import { is } from '../shared/ModelUtil';
+import { renderAssociation } from './connections/association';
+import { renderNoteLink } from './connections/notelink';
+import { renderSubsetLink } from './connections/subsetlink';
+import { renderComment } from './shapes/comment';
+import { renderConstraint } from './shapes/constraint';
+import { renderEntity } from './shapes/entity';
+import { renderGeneralization } from './shapes/generalization';
+import { renderRelationship } from './shapes/relationship';
 
 /**
  * Renderer for ERM elements
@@ -25,17 +26,23 @@ export default function ErmRenderer(
     this._styles = styles;
     this._canvas = canvas;
     this._textRenderer = textRenderer;
+    this.CONNECTION_STYLE = this._styles.style(['no-fill'], {
+        strokeWidth: 5,
+        stroke: 'fuchsia',
+    });
+    this.SHAPE_STYLE = this._styles.style({
+        fill: 'white',
+        stroke: 'fuchsia',
+        strokeWidth: 2,
+    });
+    this.FRAME_STYLE = this._styles.style(['no-fill'], {
+        stroke: 'fuchsia',
+        strokeDasharray: 4,
+        strokeWidth: 2,
+    });
 }
 
 inherits(ErmRenderer, BaseRenderer);
-
-ErmRenderer.$inject = [
-    'config.ermRenderer',
-    'eventBus',
-    'styles',
-    'canvas',
-    'textRenderer',
-];
 
 /**
  * Checks whether an element can be rendered.
@@ -58,23 +65,61 @@ ErmRenderer.prototype.canRender = function (element) {
  *
  * @return {SVGElement} The SVG element of the shape drawn.
  */
-ErmRenderer.prototype.drawShape = function (parentNode, element) {
-    const visual = svgCreate('g');
-
-    if (is(element, 'erm:Entity')) {
-        const rect = createRect(element);
-
-        svgAppend(visual, rect);
-    } else if (is(element, 'erm:Relationship')) {
-        const diamond = createDiamond(element);
-        svgAppend(visual, diamond);
+ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
+    var renderedShape;
+    switch (element.type) {
+        case 'erm:Entity':
+            renderedShape = renderEntity(
+                visuals,
+                element,
+                this._textRenderer,
+                attrs,
+            );
+            break;
+        case 'erm:Relationship':
+            renderedShape = renderRelationship(
+                visuals,
+                element,
+                this._textRenderer,
+                attrs,
+            );
+            break;
+        case 'erm:Generalization':
+        case 'erm:DisjunctGeneralization':
+        case 'erm:OverlappingGeneralization':
+            renderedShape = renderGeneralization(
+                visuals,
+                element,
+                this.FRAME_STYLE,
+                this.SHAPE_STYLE,
+                attrs,
+            );
+            break;
+        case 'erm:Comment':
+            renderedShape = renderComment(
+                visuals,
+                element,
+                this.FRAME_STYLE,
+                this.SHAPE_STYLE,
+                attrs,
+            );
+            break;
+        case 'erm:Constraint':
+            renderedShape = renderConstraint(
+                visuals,
+                element,
+                this.FRAME_STYLE,
+                this.SHAPE_STYLE,
+                attrs,
+            );
+            break;
+        default:
+            console.warn(
+                `drawShape for element ${element.type} is not supported`,
+            );
+            break;
     }
-
-    this._renderLabel(visual, element);
-
-    svgAppend(parentNode, visual);
-
-    return visual;
+    return renderedShape;
 };
 
 /**
@@ -86,227 +131,66 @@ ErmRenderer.prototype.drawShape = function (parentNode, element) {
  *
  * @return {SVGElement} The SVG element of the connection drawn.
  */
-ErmRenderer.prototype.drawConnection = function (
-    parentGfx,
-    connection,
-    attrs = {},
-) {
-    const { waypoints } = connection;
-    const source = connection.source;
-    const target = connection.target;
-    const optimalPoints = calculateOptimalConnectionPoints(source, target);
-    const adjustedWaypoints = [...waypoints];
-
-    if (waypoints.length >= 2) {
-        adjustedWaypoints[0] = optimalPoints.source;
-        adjustedWaypoints[adjustedWaypoints.length - 1] = optimalPoints.target;
-    }
-
-    const style = {
-        stroke: attrs.color || '#000000',
-        strokeWidth: attrs.strokeWidth || 2,
-        fill: 'none',
-    };
-
-    // Erstellen der Basislinie mit angepassten Wegpunkten
-    const line = createLine(adjustedWaypoints, style);
-
-    // Hinzufügen von Klassen basierend auf dem Verbindungstyp
-    svgClasses(line).add('erm-connection');
-    svgClasses(line).add(
-        `erm-${lowerCaseTypeWithoutNamespace(connection.type)}`,
-    );
-
-    // Spezielle Behandlung für verschiedene Verbindungstypen
+ErmRenderer.prototype.drawConnection = function (visuals, connection, attrs) {
+    var renderedConnection;
     switch (connection.type) {
         case 'erm:Association':
-            // Normale Linie für Assoziationen
-            break;
-        case 'erm:Generalization':
-            // Pfeil am Ende für Generalisierung
-            addArrowHead(line, adjustedWaypoints[adjustedWaypoints.length - 1]);
+            renderedConnection = renderAssociation(visuals, connection, attrs);
             break;
         case 'erm:NoteLink':
-            // Gestrichelte Linie für Notiz-Verbindungen
-            line.style.strokeDasharray = '5, 5';
+            renderedConnection = renderNoteLink(
+                visuals,
+                connection,
+                this.CONNECTION_STYLE,
+                attrs,
+            );
             break;
         case 'erm:SubsetLink':
-            // Gepunktete Linie für Subset-Verbindungen
-            line.style.strokeDasharray = '1, 3';
+            renderedConnection = renderSubsetLink(
+                visuals,
+                connection,
+                this.CONNECTION_STYLE,
+                attrs,
+            );
             break;
         default:
-            console.warn(`Unbekannter Verbindungstyp: ${connection.type}`);
+            console.warn(
+                `drawConnection for element ${connection.type} is not supported`,
+            );
+            break;
     }
-
-    svgAppend(parentGfx, line);
-
-    return line;
+    return renderedConnection;
 };
 
-ErmRenderer.prototype._renderLabel = function (
-    parentGfx,
-    labelRequestingElement,
+ErmRenderer.prototype.getShapePath = function getShapePath(shape) {
+    const width = shape.width;
+    const shapePath = [
+        ['M', shape.x, shape.y],
+        ['l', width, 0],
+        ['l', 0, shape.height],
+        ['l', -width, 0],
+        ['z'],
+    ];
+    return componentsToPath(shapePath);
+};
+
+ErmRenderer.prototype.getConnectionPath = function getConnectionPath(
+    connection,
 ) {
-    const options = standardTextLayoutConfig(
-        labelRequestingElement.width,
-        labelRequestingElement.height,
-    );
-
-    const text = this._textRenderer.createText(
-        labelRequestingElement?.name || '',
-        options,
-    );
-
-    svgClasses(text).add('djs-label');
-
-    svgAppend(parentGfx, text);
-
-    // TODO: ensure rendering label text in the middle of the shape via post processing
-
-    return text;
-};
-
-const createRect = (element) => {
-    const rect = svgCreate('rect');
-    svgAttr(rect, {
-        x: 0,
-        y: 0,
-        width: element.width,
-        height: element.height,
-        rx: 10,
-        ry: 10,
-        stroke: '#000000',
-        strokeWidth: 2,
-        fill: '#FFFFFF',
-    });
-    rect.setAttribute('fill', '#FFFFFF');
-    return rect;
-};
-
-const createDiamond = (element) => {
-    const diamond = svgCreate('path');
-    svgAttr(diamond, {
-        d: getDiamondPath(element),
-        stroke: '#000000',
-        strokeWidth: 2,
-        fill: '#FFFFFF',
-    });
-    diamond.setAttribute('fill', '#FFFFFF');
-    return diamond;
-};
-
-const getDiamondPath = (element) => {
-    const { width, height } = element;
-    const middleX = width / 2;
-    const middleY = height / 2;
-    return `M${middleX},0 L${width},${middleY} L${middleX},${height} L0,${middleY} Z`;
-};
-
-const standardTextLayoutConfig = (elementWidth, elementHeight) => {
-    return {
-        align: 'center-middle',
-        box: {
-            width: elementWidth,
-            height: elementHeight,
-        },
-        fitBox: false,
-        padding: {
-            left: parseInt(elementWidth * 0.3),
-        },
-    };
-};
-
-const addArrowHead = (line, endPoint) => {
-    const arrowHead = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'path',
-    );
-    const arrowSize = 10;
-    const arrowPath = ''.concat(
-        'M',
-        endPoint.x,
-        ',',
-        endPoint.y,
-        'L',
-        endPoint.x - arrowSize,
-        ',',
-        endPoint.y - arrowSize,
-        'L',
-        endPoint.x - arrowSize,
-        ',',
-        endPoint.y + arrowSize,
-        'Z',
-    );
-
-    arrowHead.setAttribute('d', arrowPath);
-    arrowHead.setAttribute('fill', line.style.stroke);
-
-    line.parentNode.appendChild(arrowHead);
-};
-
-const calculateOptimalConnectionPoints = (sourceElement, targetElement) => {
-    const sides = ['top', 'right', 'bottom', 'left'];
-    const sourcePoints = sides.map((side) =>
-        getConnectionPoint(sourceElement, side),
-    );
-    const targetPoints = sides.map((side) =>
-        getConnectionPoint(targetElement, side),
-    );
-
-    let minDistance = Infinity;
-    let optimalPoints;
-
-    sourcePoints.forEach((sourcePoint) => {
-        targetPoints.forEach((targetPoint) => {
-            const distance = Math.sqrt(
-                Math.pow(targetPoint.x - sourcePoint.x, 2) +
-                    Math.pow(targetPoint.y - sourcePoint.y, 2),
-            );
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                optimalPoints = {
-                    source: sourcePoint,
-                    target: targetPoint,
-                };
-            }
-        });
-    });
-
-    return optimalPoints;
-};
-
-const getConnectionPoint = (element, preferredConnectionPoint) => {
-    switch (preferredConnectionPoint) {
-        case 'top':
-            return {
-                x: element.x + element.width / 2,
-                y: element.y,
-            };
-        case 'left':
-            return {
-                x: element.x,
-                y: element.y + element.height / 2,
-            };
-        case 'bottom':
-            return {
-                x: element.x + element.width / 2,
-                y: element.y + element.height,
-            };
-        case 'right':
-            return {
-                x: element.x + element.width,
-                y: element.y + element.height / 2,
-            };
-        default:
-            throw new Error(
-                'Unknown preferred connection point: '.concat(
-                    preferredConnectionPoint,
-                ),
-            );
+    const waypoints = connection.waypoints;
+    const connectionPath = [];
+    let point;
+    for (let idx = 0; (point = waypoints[idx]); idx++) {
+        point = point.original || point;
+        connectionPath.push([idx === 0 ? 'M' : 'L', point.x, point.y]);
     }
+    return componentsToPath(connectionPath);
 };
 
-const lowerCaseTypeWithoutNamespace = (type) => {
-    return type.substring(type.indexOf(':') + 1).toLowerCase();
-};
+ErmRenderer.$inject = [
+    'config.ermRenderer',
+    'eventBus',
+    'styles',
+    'canvas',
+    'textRenderer',
+];

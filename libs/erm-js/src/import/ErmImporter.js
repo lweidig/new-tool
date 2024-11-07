@@ -68,6 +68,7 @@ export function importErmDiagram(targetDiagram, ermRoot) {
             const y = middleY + radius * Math.sin(angle) - 40;
 
             const newShape = elementFactory.createShape({
+                id: shape.id,
                 type: shape.$type,
                 businessObject: shape,
                 x: x,
@@ -76,7 +77,6 @@ export function importErmDiagram(targetDiagram, ermRoot) {
                 height: 80,
                 name: shape.name || shape.$type,
             });
-            newShape.id = shape.id;
             eventBus.fire('ermElement.added', { element: newShape });
             canvas.addShape(newShape);
         });
@@ -86,8 +86,12 @@ export function importErmDiagram(targetDiagram, ermRoot) {
 
             if (sourceShape && targetShape) {
                 const newConnection = elementFactory.createConnection({
+                    id: connection.id,
                     type: connection.$type,
                     businessObject: connection,
+                    name:
+                        connection.name ||
+                        `${sourceShape.name} -> ${targetShape.name}`,
                     source: sourceShape,
                     target: targetShape,
                     waypoints: [
@@ -101,10 +105,6 @@ export function importErmDiagram(targetDiagram, ermRoot) {
                         },
                     ],
                 });
-                newConnection.id = connection.id;
-                newConnection.name =
-                    connection.name ||
-                    `${sourceShape.name} -> ${targetShape.name}`;
                 eventBus.fire('ermElement.added', {
                     element: newConnection,
                 });

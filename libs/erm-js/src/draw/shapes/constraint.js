@@ -4,33 +4,64 @@ import {
     create as svgCreate,
 } from 'tiny-svg';
 
-import { assign } from 'min-dash';
+export function renderConstraint(visuals, element, _attrs) {
+    const CONSTRAINT_TITLE_TILE_SIZE = 14;
+    const width = element.width || 0;
+    const height = element.height || 0;
 
-import { isFrameElement } from 'diagram-js/lib/util/Elements';
+    const constraint = svgCreate('g');
 
-export function renderConstraint(
-    visuals,
-    element,
-    frameStyle,
-    shapeStyle,
-    attrs,
-) {
-    var rect = svgCreate('rect');
-
-    svgAttr(rect, {
+    const titleTile = svgCreate('rect');
+    svgAttr(titleTile, {
         x: 0,
         y: 0,
-        width: element.width || 0,
-        height: element.height || 0,
+        width: CONSTRAINT_TITLE_TILE_SIZE,
+        height: CONSTRAINT_TITLE_TILE_SIZE,
+        stroke: '#000000',
+        strokeWidth: 2,
+        fill: '#000000',
     });
+    titleTile.setAttribute('fill', '#FFFFFF');
+    svgAppend(constraint, titleTile);
 
-    if (isFrameElement(element)) {
-        svgAttr(rect, assign({}, frameStyle, attrs || {}));
-    } else {
-        svgAttr(rect, assign({}, shapeStyle, attrs || {}));
-    }
+    const titleTileText = svgCreate('text');
+    svgAttr(titleTileText, {
+        x: CONSTRAINT_TITLE_TILE_SIZE / 2,
+        y: CONSTRAINT_TITLE_TILE_SIZE / 2,
+        fill: '#FFFFFF',
+        'text-anchor': 'middle',
+        'dominant-baseline': 'middle',
+        'font-size': '10px',
+        'font-family': 'Arial, sans-serif',
+    });
+    titleTileText.textContent = 'C1';
+    svgAppend(constraint, titleTileText);
 
-    svgAppend(visuals, rect);
+    const constraintContent = svgCreate('rect');
+    svgAttr(constraintContent, {
+        x: CONSTRAINT_TITLE_TILE_SIZE,
+        y: 0,
+        width: width - CONSTRAINT_TITLE_TILE_SIZE,
+        height: height,
+        stroke: '#000000',
+        strokeWidth: 2,
+        fill: '#FFFFFF',
+    });
+    constraintContent.setAttribute('fill', '#FFFFFF');
+    svgAppend(constraint, constraintContent);
 
-    return rect;
+    const constraintContentText = svgCreate('text');
+    svgAttr(constraintContentText, {
+        x: 5,
+        y: 20,
+        'font-size': '12px',
+        'font-family': 'Arial, sans-serif',
+    });
+    constraintContentText.textContent =
+        element.text || '<CONSTRAINT PLACEHOLDER>';
+    svgAppend(constraint, constraintContentText);
+
+    svgAppend(visuals, constraint);
+
+    return constraint;
 }

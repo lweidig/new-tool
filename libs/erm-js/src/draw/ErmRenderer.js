@@ -99,13 +99,7 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
             renderedShape = renderComment(visuals, element, attrs);
             break;
         case 'erm:Constraint':
-            renderedShape = renderConstraint(
-                visuals,
-                element,
-                this.FRAME_STYLE,
-                this.SHAPE_STYLE,
-                attrs,
-            );
+            renderedShape = renderConstraint(visuals, element, attrs);
             break;
         default:
             console.warn(

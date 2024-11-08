@@ -6,9 +6,7 @@ import {
 } from './helper/functions';
 
 export function renderAssociation(visuals, connection, attrs) {
-    const { waypoints } = connection;
-    const source = connection.source;
-    const target = connection.target;
+    const { waypoints, source, target } = connection;
     const optimalPoints = calculateOptimalConnectionPoints(source, target);
     const adjustedWaypoints = [...waypoints];
 

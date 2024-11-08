@@ -120,12 +120,7 @@ ErmRenderer.prototype.drawConnection = function (visuals, connection, attrs) {
             renderedConnection = renderAssociation(visuals, connection, attrs);
             break;
         case 'erm:NoteLink':
-            renderedConnection = renderNoteLink(
-                visuals,
-                connection,
-                this.CONNECTION_STYLE,
-                attrs,
-            );
+            renderedConnection = renderNoteLink(visuals, connection, attrs);
             break;
         case 'erm:SubsetLink':
             renderedConnection = renderSubsetLink(

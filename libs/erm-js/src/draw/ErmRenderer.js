@@ -87,13 +87,7 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
         case 'erm:Generalization':
         case 'erm:DisjunctGeneralization':
         case 'erm:OverlappingGeneralization':
-            renderedShape = renderGeneralization(
-                visuals,
-                element,
-                this.FRAME_STYLE,
-                this.SHAPE_STYLE,
-                attrs,
-            );
+            renderedShape = renderGeneralization(visuals, element, attrs);
             break;
         case 'erm:Comment':
             renderedShape = renderComment(visuals, element, attrs);

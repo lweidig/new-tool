@@ -98,6 +98,7 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
         default:
             console.warn(
                 `drawShape for element ${element.type} is not supported`,
+                element,
             );
             break;
     }
@@ -123,16 +124,12 @@ ErmRenderer.prototype.drawConnection = function (visuals, connection, attrs) {
             renderedConnection = renderNoteLink(visuals, connection, attrs);
             break;
         case 'erm:SubsetLink':
-            renderedConnection = renderSubsetLink(
-                visuals,
-                connection,
-                this.CONNECTION_STYLE,
-                attrs,
-            );
+            renderedConnection = renderSubsetLink(visuals, connection, attrs);
             break;
         default:
             console.warn(
                 `drawConnection for element ${connection.type} is not supported`,
+                connection,
             );
             break;
     }

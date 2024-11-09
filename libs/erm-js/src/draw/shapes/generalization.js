@@ -4,7 +4,7 @@ import {
     create as svgCreate,
 } from 'tiny-svg';
 
-const GENERALIZATION_RADIUS = 20;
+export const GENERALIZATION_RADIUS = 20;
 const GENERALIZATION_TEXT_ATTRIBUTES = {
     x: GENERALIZATION_RADIUS,
     y: GENERALIZATION_RADIUS,

@@ -17,7 +17,7 @@ export function renderAssociation(visuals, connection, attrs) {
 
     const style = {
         stroke: attrs.color || '#000000',
-        strokeWidth: attrs.strokeWidth || 2,
+        strokeWidth: attrs.strokeWidth || 1,
         fill: 'none',
     };
 

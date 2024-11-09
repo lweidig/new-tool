@@ -112,7 +112,14 @@
         {
             "name": "Generalization",
             "superClass": ["ErmElement"],
-            "properties": []
+            "properties": [
+                {
+                    "name": "isTotal",
+                    "type": "Boolean",
+                    "isAttr": true,
+                    "default": false
+                }
+            ]
         },
         {
             "name": "DisjunctGeneralization",

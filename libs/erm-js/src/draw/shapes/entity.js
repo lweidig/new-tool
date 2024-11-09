@@ -6,13 +6,12 @@ import {
 
 import { renderLabel } from '../text/label';
 
-export function renderEntity(visuals, element, textRenderer, _attrs) {
-    const visual = svgCreate('g');
+export function renderEntity(element, textRenderer, _attrs) {
+    const entity = svgCreate('g');
     const rect = createRect(element);
-    svgAppend(visual, rect);
-    renderLabel(visual, element, textRenderer);
-    svgAppend(visuals, visual);
-    return visual;
+    svgAppend(entity, rect);
+    renderLabel(entity, element, textRenderer);
+    return entity;
 }
 
 const createRect = (element) => {

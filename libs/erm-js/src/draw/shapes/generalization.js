@@ -15,7 +15,7 @@ const GENERALIZATION_TEXT_ATTRIBUTES = {
     'font-family': 'Arial, sans-serif',
 };
 
-export function renderGeneralization(visuals, element, _attrs) {
+export function renderGeneralization(element, _attrs) {
     const generalization = svgCreate('g');
     const circle = svgCreate('circle');
 
@@ -42,8 +42,6 @@ export function renderGeneralization(visuals, element, _attrs) {
         overlappingChar.textContent = 'o';
         svgAppend(generalization, overlappingChar);
     }
-
-    svgAppend(visuals, generalization);
 
     return generalization;
 }

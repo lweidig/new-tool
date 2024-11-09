@@ -4,7 +4,7 @@ import {
     create as svgCreate,
 } from 'tiny-svg';
 
-export function renderConstraint(visuals, element, _attrs) {
+export function renderConstraint(element, _attrs) {
     const CONSTRAINT_TITLE_TILE_SIZE = 14;
     const width = element.width || 0;
     const height = element.height || 0;
@@ -60,8 +60,6 @@ export function renderConstraint(visuals, element, _attrs) {
     constraintContentText.textContent =
         element.text || '<CONSTRAINT PLACEHOLDER>';
     svgAppend(constraint, constraintContentText);
-
-    svgAppend(visuals, constraint);
 
     return constraint;
 }

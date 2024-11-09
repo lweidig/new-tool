@@ -1,3 +1,4 @@
+import { classes as svgClasses } from 'tiny-svg';
 import { GENERALIZATION_RADIUS } from '../../shapes/generalization';
 import { SubsetLinkType } from '../subsetlink';
 
@@ -5,7 +6,28 @@ export function lowerCaseTypeWithoutNamespace(type) {
     return type.substring(type.indexOf(':') + 1).toLowerCase();
 }
 
-export function calculateOptimalConnectionPoints(
+export function getAdjustedWaypoints(connection, subsetLinkType) {
+    const { waypoints, source, target } = connection;
+    const optimalPoints = calculateOptimalConnectionPoints(
+        source,
+        target,
+        subsetLinkType,
+    );
+    const adjustedWaypoints = [...waypoints];
+    if (waypoints.length >= 2) {
+        adjustedWaypoints[0] = optimalPoints.source;
+        adjustedWaypoints[adjustedWaypoints.length - 1] = optimalPoints.target;
+    }
+    return adjustedWaypoints;
+}
+
+export function addConnectionClasses(element, connection) {
+    const { type } = connection;
+    svgClasses(element).add('erm-connection');
+    svgClasses(element).add(`erm-${lowerCaseTypeWithoutNamespace(type)}`);
+}
+
+function calculateOptimalConnectionPoints(
     sourceElement,
     targetElement,
     subsetLinkType,

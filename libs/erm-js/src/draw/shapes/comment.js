@@ -6,15 +6,16 @@ import {
 
 import { toSVGPoints } from 'diagram-js/lib/util/RenderUtil';
 
-export function renderComment(visuals, element, _attrs) {
+export function renderComment(element, _attrs) {
     const COMMENT_FOLD_SIZE = 14;
     const width = element.width || 0;
     const height = element.height || 0;
     const foldPointDown = { x: width, y: COMMENT_FOLD_SIZE };
     const foldPointUp = { x: width - COMMENT_FOLD_SIZE, y: 0 };
 
-    // comment
-    const comment = svgCreate('polygon');
+    const comment = svgCreate('g');
+
+    const mainComment = svgCreate('polygon');
     const points = [
         { x: 0, y: 0 },
         { x: 0, y: height },
@@ -22,14 +23,13 @@ export function renderComment(visuals, element, _attrs) {
         foldPointDown,
         foldPointUp,
     ];
-    svgAttr(comment, {
+    svgAttr(mainComment, {
         points: toSVGPoints(points),
         fill: 'white',
         stroke: 'black',
     });
-    svgAppend(visuals, comment);
+    svgAppend(comment, mainComment);
 
-    // fold
     const fold = svgCreate('polygon');
     const foldPoints = [
         foldPointDown,
@@ -41,9 +41,8 @@ export function renderComment(visuals, element, _attrs) {
         fill: 'white',
         stroke: 'black',
     });
-    svgAppend(visuals, fold);
+    svgAppend(comment, fold);
 
-    // text
     const text = svgCreate('text');
     svgAttr(text, {
         x: 5,
@@ -52,7 +51,7 @@ export function renderComment(visuals, element, _attrs) {
         'font-family': 'Arial, sans-serif',
     });
     text.textContent = element.text || '<COMMENT PLACEHOLDER>';
-    svgAppend(visuals, text);
+    svgAppend(comment, text);
 
     return comment;
 }

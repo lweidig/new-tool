@@ -1,37 +1,16 @@
 import { createLine } from 'diagram-js/lib/util/RenderUtil';
-import { append as svgAppend, classes as svgClasses } from 'tiny-svg';
-import {
-    calculateOptimalConnectionPoints,
-    lowerCaseTypeWithoutNamespace,
-} from './helper/functions';
+import { addConnectionClasses, getAdjustedWaypoints } from './helper/functions';
 
-export function renderNoteLink(visuals, connection, attrs) {
-    const { waypoints, source, target } = connection;
-    const optimalPoints = calculateOptimalConnectionPoints(source, target);
-    const adjustedWaypoints = [...waypoints];
+export function renderNoteLink(connection, attrs) {
+    const adjustedWaypoints = getAdjustedWaypoints(connection);
 
-    if (waypoints.length >= 2) {
-        adjustedWaypoints[0] = optimalPoints.source;
-        adjustedWaypoints[adjustedWaypoints.length - 1] = optimalPoints.target;
-    }
-
-    const style = {
+    const line = createLine(adjustedWaypoints, {
         stroke: attrs.color || '#000000',
         strokeWidth: attrs.strokeWidth || 2,
         fill: 'none',
         strokeDasharray: '4 2',
-    };
-
-    // Erstellen der Basislinie mit angepassten Wegpunkten
-    const line = createLine(adjustedWaypoints, style);
-
-    // Hinzufügen von Klassen basierend auf dem Verbindungstyp
-    svgClasses(line).add('erm-connection');
-    svgClasses(line).add(
-        `erm-${lowerCaseTypeWithoutNamespace(connection.type)}`,
-    );
-
-    svgAppend(visuals, line);
+    });
+    addConnectionClasses(line, connection);
 
     return line;
 }

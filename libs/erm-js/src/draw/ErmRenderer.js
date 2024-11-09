@@ -1,6 +1,7 @@
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 import { componentsToPath } from 'diagram-js/lib/util/RenderUtil';
 import inherits from 'inherits-browser';
+import { append as svgAppend } from 'tiny-svg';
 import { is } from '../shared/ModelUtil';
 import { renderAssociation } from './connections/association';
 import { renderNoteLink } from './connections/notelink';
@@ -69,16 +70,10 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
     var renderedShape;
     switch (element.type) {
         case 'erm:Entity':
-            renderedShape = renderEntity(
-                visuals,
-                element,
-                this._textRenderer,
-                attrs,
-            );
+            renderedShape = renderEntity(element, this._textRenderer, attrs);
             break;
         case 'erm:Relationship':
             renderedShape = renderRelationship(
-                visuals,
                 element,
                 this._textRenderer,
                 attrs,
@@ -87,13 +82,13 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
         case 'erm:Generalization':
         case 'erm:DisjunctGeneralization':
         case 'erm:OverlappingGeneralization':
-            renderedShape = renderGeneralization(visuals, element, attrs);
+            renderedShape = renderGeneralization(element, attrs);
             break;
         case 'erm:Comment':
-            renderedShape = renderComment(visuals, element, attrs);
+            renderedShape = renderComment(element, attrs);
             break;
         case 'erm:Constraint':
-            renderedShape = renderConstraint(visuals, element, attrs);
+            renderedShape = renderConstraint(element, attrs);
             break;
         default:
             console.warn(
@@ -101,6 +96,9 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
                 element,
             );
             break;
+    }
+    if (renderedShape) {
+        svgAppend(visuals, renderedShape);
     }
     return renderedShape;
 };
@@ -118,13 +116,13 @@ ErmRenderer.prototype.drawConnection = function (visuals, connection, attrs) {
     var renderedConnection;
     switch (connection.type) {
         case 'erm:Association':
-            renderedConnection = renderAssociation(visuals, connection, attrs);
+            renderedConnection = renderAssociation(connection, attrs);
             break;
         case 'erm:NoteLink':
-            renderedConnection = renderNoteLink(visuals, connection, attrs);
+            renderedConnection = renderNoteLink(connection, attrs);
             break;
         case 'erm:SubsetLink':
-            renderedConnection = renderSubsetLink(visuals, connection, attrs);
+            renderedConnection = renderSubsetLink(connection, attrs);
             break;
         default:
             console.warn(
@@ -132,6 +130,9 @@ ErmRenderer.prototype.drawConnection = function (visuals, connection, attrs) {
                 connection,
             );
             break;
+    }
+    if (renderedConnection) {
+        svgAppend(visuals, renderedConnection);
     }
     return renderedConnection;
 };

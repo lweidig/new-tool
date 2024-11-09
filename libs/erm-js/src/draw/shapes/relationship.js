@@ -6,12 +6,11 @@ import {
 
 import { renderLabel } from '../text/label';
 
-export function renderRelationship(visuals, element, textRenderer, _attrs) {
+export function renderRelationship(element, textRenderer, _attrs) {
     const visual = svgCreate('g');
     const diamond = createDiamond(element);
     svgAppend(visual, diamond);
     renderLabel(visual, element, textRenderer);
-    svgAppend(visuals, visual);
     return visual;
 }
 

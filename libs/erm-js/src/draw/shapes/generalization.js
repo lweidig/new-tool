@@ -1,8 +1,4 @@
-import {
-    append as svgAppend,
-    attr as svgAttr,
-    create as svgCreate,
-} from 'tiny-svg';
+import { append as svgAppend, create as svgCreate } from 'tiny-svg';
 
 export const GENERALIZATION_RADIUS = 20;
 const GENERALIZATION_TEXT_ATTRIBUTES = {
@@ -12,14 +8,11 @@ const GENERALIZATION_TEXT_ATTRIBUTES = {
     'text-anchor': 'middle',
     'dominant-baseline': 'middle',
     'font-size': '18px',
-    'font-family': 'Arial, sans-serif',
 };
 
-export function renderGeneralization(element, _attrs) {
+export function renderGeneralization(textRenderer, element, _attrs) {
     const generalization = svgCreate('g');
-    const circle = svgCreate('circle');
-
-    svgAttr(circle, {
+    const circle = svgCreate('circle', {
         cx: GENERALIZATION_RADIUS,
         cy: GENERALIZATION_RADIUS,
         r: GENERALIZATION_RADIUS,
@@ -30,16 +23,17 @@ export function renderGeneralization(element, _attrs) {
     svgAppend(generalization, circle);
 
     if (element.type === 'erm:DisjunctGeneralization') {
-        const disjunctChar = svgCreate('text', GENERALIZATION_TEXT_ATTRIBUTES);
-        disjunctChar.textContent = 'd';
+        const disjunctChar = textRenderer.createText(
+            'd',
+            GENERALIZATION_TEXT_ATTRIBUTES,
+        );
         svgAppend(generalization, disjunctChar);
     }
     if (element.type === 'erm:OverlappingGeneralization') {
-        const overlappingChar = svgCreate(
-            'text',
+        const overlappingChar = textRenderer.createText(
+            'o',
             GENERALIZATION_TEXT_ATTRIBUTES,
         );
-        overlappingChar.textContent = 'o';
         svgAppend(generalization, overlappingChar);
     }
 

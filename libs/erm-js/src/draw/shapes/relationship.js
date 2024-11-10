@@ -1,6 +1,6 @@
 import { append as svgAppend, create as svgCreate } from 'tiny-svg';
 
-export function renderRelationship(element, _textRenderer, _attrs) {
+export function renderRelationship(textRenderer, element, _attrs) {
     const { width, height } = element;
     const middleX = width / 2;
     const middleY = height / 2;
@@ -15,14 +15,14 @@ export function renderRelationship(element, _textRenderer, _attrs) {
     });
     svgAppend(relationship, diamond);
 
-    const text = svgCreate('text', {
+    const text = textRenderer.createText(element.name, {
         x: middleX,
-        y: middleY + 3,
-        'font-size': '12px',
-        'font-family': 'Arial, sans-serif',
+        y: middleY,
+        fill: '#000000',
         textAnchor: 'middle',
+        fontSize: 14,
+        'dominant-baseline': 'middle',
     });
-    text.textContent = element.name;
     svgAppend(relationship, text);
 
     return relationship;

@@ -70,25 +70,33 @@ ErmRenderer.prototype.drawShape = function (visuals, element, attrs) {
     var renderedShape;
     switch (element.type) {
         case 'erm:Entity':
-            renderedShape = renderEntity(element, this._textRenderer, attrs);
+            renderedShape = renderEntity(this._textRenderer, element, attrs);
             break;
         case 'erm:Relationship':
             renderedShape = renderRelationship(
-                element,
                 this._textRenderer,
+                element,
                 attrs,
             );
             break;
         case 'erm:Generalization':
         case 'erm:DisjunctGeneralization':
         case 'erm:OverlappingGeneralization':
-            renderedShape = renderGeneralization(element, attrs);
+            renderedShape = renderGeneralization(
+                this._textRenderer,
+                element,
+                attrs,
+            );
             break;
         case 'erm:Comment':
-            renderedShape = renderComment(element, attrs);
+            renderedShape = renderComment(this._textRenderer, element, attrs);
             break;
         case 'erm:Constraint':
-            renderedShape = renderConstraint(element, attrs);
+            renderedShape = renderConstraint(
+                this._textRenderer,
+                element,
+                attrs,
+            );
             break;
         default:
             console.warn(
@@ -116,7 +124,11 @@ ErmRenderer.prototype.drawConnection = function (visuals, connection, attrs) {
     var renderedConnection;
     switch (connection.type) {
         case 'erm:Association':
-            renderedConnection = renderAssociation(connection, attrs);
+            renderedConnection = renderAssociation(
+                this._textRenderer,
+                connection,
+                attrs,
+            );
             break;
         case 'erm:NoteLink':
             renderedConnection = renderNoteLink(connection, attrs);

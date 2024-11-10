@@ -6,10 +6,9 @@ import {
 
 import { toSVGPoints } from 'diagram-js/lib/util/RenderUtil';
 
-export function renderComment(element, _attrs) {
+export function renderComment(textRenderer, element, _attrs) {
     const COMMENT_FOLD_SIZE = 14;
-    const width = element.width || 0;
-    const height = element.height || 0;
+    const { width, height, businessObject } = element;
     const foldPointDown = { x: width, y: COMMENT_FOLD_SIZE };
     const foldPointUp = { x: width - COMMENT_FOLD_SIZE, y: 0 };
 
@@ -43,15 +42,13 @@ export function renderComment(element, _attrs) {
     });
     svgAppend(comment, fold);
 
-    const text = svgCreate('text');
-    svgAttr(text, {
+    const textBox = textRenderer.createTextBox(businessObject.textContent, {
         x: 5,
-        y: 20,
-        'font-size': '12px',
-        'font-family': 'Arial, sans-serif',
+        y: 5,
+        width: width - 5,
+        height: height - 5,
     });
-    text.textContent = element.text || '<COMMENT PLACEHOLDER>';
-    svgAppend(comment, text);
+    svgAppend(comment, textBox);
 
     return comment;
 }

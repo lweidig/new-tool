@@ -145,7 +145,7 @@ describe('erm-moddle', function () {
             it('should init Comment', function () {
                 const comment = moddle.create('erm:Comment');
 
-                expect(comment.text).to.eql('<Comment>');
+                expect(comment.textContent).to.eql('<Comment>');
             });
         });
     });

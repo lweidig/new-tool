@@ -59,39 +59,34 @@
                 }
             ]
         },
-
         {
             "$type": "erm:Relationship",
             "id": "employment",
             "name": "Employment"
         },
-
         {
             "$type": "erm:Generalization",
             "id": "unspecifiedGen1"
         },
-
         {
             "$type": "erm:DisjunctGeneralization",
             "id": "disjunctGen1"
         },
-
         {
             "$type": "erm:OverlappingGeneralization",
             "id": "overlapGen1"
         },
-
         {
             "$type": "erm:Comment",
             "id": "comment1",
-            "text": "Hierarchische Personenverwaltung"
+            "textContent": "Das ist ein langer Text, der den Inhalt dieses Kommentars darstellt und ordnungsgemäß umgebrochen wird"
         },
-
         {
             "$type": "erm:Constraint",
-            "id": "constraint1"
+            "id": "constraint1",
+            "titleIndex": 1,
+            "textContent": "Das ist ein langer Text, der den Constraint C1 näher beschreibt und ordnungsgemäß umgebrochen wird"
         },
-
         {
             "$type": "erm:Association",
             "id": "assoc1",
@@ -104,28 +99,24 @@
             "sourceRef": "employment",
             "targetRef": "employee"
         },
-
         {
             "$type": "erm:NoteLink",
             "id": "noteLink1",
             "sourceRef": "comment1",
             "targetRef": "person"
         },
-
         {
             "$type": "erm:SubsetLink",
             "id": "subsetLink1",
             "sourceRef": "employee",
             "targetRef": "unspecifiedGen1"
         },
-
         {
             "$type": "erm:SubsetLink",
             "id": "subsetLink2",
             "sourceRef": "unspecifiedGen1",
             "targetRef": "person"
         },
-
         {
             "$type": "erm:SubsetLink",
             "id": "subsetLink3",

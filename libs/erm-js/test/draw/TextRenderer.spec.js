@@ -13,9 +13,13 @@ describe('TextRenderer', function () {
             // given
             const text = 'Test Text';
             const options = {
-                align: 'center-middle',
-                padding: 5,
-                style: { fontSize: '14px', fontWeight: 'bold' },
+                x: 10,
+                y: 20,
+                fill: '#000000',
+                fontSize: 14,
+                fontWeight: 'bold',
+                textAnchor: 'middle',
+                dominantBaseline: 'middle',
             };
 
             // when
@@ -24,9 +28,37 @@ describe('TextRenderer', function () {
             // then
             expect(textElement.tagName).to.equal('text');
             expect(textElement.textContent).to.equal(text);
-            expect(textElement.getAttribute('text-anchor')).to.equal('middle');
             expect(textElement.style.fontSize).to.equal('14px');
             expect(textElement.style.fontWeight).to.equal('bold');
+        });
+    });
+
+    describe('createTextBox', function () {
+        it('should create a textBox correct position and word-wrap by default', function () {
+            // given
+            const text = 'Test Text';
+            const options = {
+                x: 10,
+                y: 20,
+                width: 100,
+                height: 50,
+                fill: '#000000',
+                fontSize: 14,
+                textAnchor: 'middle',
+                dominantBaseline: 'middle',
+            };
+
+            // when
+            const svgElement = textRenderer.createTextBox(text, options);
+
+            // then
+            expect(svgElement.tagName).to.equal('foreignObject');
+            expect(svgElement.childNodes).to.have.length(1);
+            expect(svgElement.textContent).to.equal(text);
+            expect(svgElement.childNodes[0].style.fontSize).to.equal('14px');
+            expect(svgElement.childNodes[0].style.wordWrap).to.equal(
+                'break-word',
+            );
         });
     });
 

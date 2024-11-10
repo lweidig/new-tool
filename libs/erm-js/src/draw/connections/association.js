@@ -2,7 +2,7 @@ import { createLine } from 'diagram-js/lib/util/RenderUtil';
 import { append as svgAppend, create as svgCreate } from 'tiny-svg';
 import { addConnectionClasses, getAdjustedWaypoints } from './helper/functions';
 
-export function renderAssociation(connection, attrs) {
+export function renderAssociation(_textRenderer, connection, attrs) {
     const adjustedWaypoints = getAdjustedWaypoints(connection);
     const association = svgCreate('g');
     const line = createLine(adjustedWaypoints, {

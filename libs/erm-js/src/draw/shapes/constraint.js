@@ -50,12 +50,12 @@ export function renderConstraint(element, _attrs) {
     constraintContent.setAttribute('fill', '#FFFFFF');
     svgAppend(constraint, constraintContent);
 
-    const constraintContentText = svgCreate('text');
-    svgAttr(constraintContentText, {
-        x: 5,
+    const constraintContentText = svgCreate('text', {
+        x: CONSTRAINT_TITLE_TILE_SIZE + 5,
         y: 20,
         'font-size': '12px',
         'font-family': 'Arial, sans-serif',
+        textAnchor: 'start',
     });
     constraintContentText.textContent =
         element.text || '<CONSTRAINT PLACEHOLDER>';

@@ -151,7 +151,7 @@ function renderConnections(renderParams, elementRegistry) {
 
 function calculateWidth(shape) {
     if (shape.$type === 'erm:Comment' || shape.$type === 'erm:Constraint') {
-        return 200;
+        return 220;
     }
     return 120;
 }

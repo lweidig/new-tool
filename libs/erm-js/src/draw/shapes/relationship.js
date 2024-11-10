@@ -1,34 +1,29 @@
-import {
-    append as svgAppend,
-    attr as svgAttr,
-    create as svgCreate,
-} from 'tiny-svg';
+import { append as svgAppend, create as svgCreate } from 'tiny-svg';
 
-import { renderLabel } from '../text/label';
+export function renderRelationship(element, _textRenderer, _attrs) {
+    const { width, height } = element;
+    const middleX = width / 2;
+    const middleY = height / 2;
+    const diamondPath = `M${middleX},0 L${width},${middleY} L${middleX},${height} L0,${middleY} Z`;
 
-export function renderRelationship(element, textRenderer, _attrs) {
-    const visual = svgCreate('g');
-    const diamond = createDiamond(element);
-    svgAppend(visual, diamond);
-    renderLabel(visual, element, textRenderer);
-    return visual;
-}
-
-const createDiamond = (element) => {
-    const diamond = svgCreate('path');
-    svgAttr(diamond, {
-        d: getDiamondPath(element),
+    const relationship = svgCreate('g');
+    const diamond = svgCreate('path', {
+        d: diamondPath,
         stroke: '#000000',
         strokeWidth: 2,
         fill: '#FFFFFF',
     });
-    diamond.setAttribute('fill', '#FFFFFF');
-    return diamond;
-};
+    svgAppend(relationship, diamond);
 
-const getDiamondPath = (element) => {
-    const { width, height } = element;
-    const middleX = width / 2;
-    const middleY = height / 2;
-    return `M${middleX},0 L${width},${middleY} L${middleX},${height} L0,${middleY} Z`;
-};
+    const text = svgCreate('text', {
+        x: middleX,
+        y: middleY + 3,
+        'font-size': '12px',
+        'font-family': 'Arial, sans-serif',
+        textAnchor: 'middle',
+    });
+    text.textContent = element.name;
+    svgAppend(relationship, text);
+
+    return relationship;
+}

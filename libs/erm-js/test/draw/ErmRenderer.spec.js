@@ -56,11 +56,12 @@ describe('draw - ErmRenderer', function () {
         // then
         const visual = domQuery('.djs-visual', associationGfx);
         expect(visual).to.exist;
-
+        const ermConnection = domQuery('.erm-connection', associationGfx);
+        expect(ermConnection).to.exist;
+        const ermAssociation = domQuery('.erm-association', associationGfx);
+        expect(ermAssociation).to.exist;
         const path = domQuery('path', visual);
         expect(path).to.exist;
-        expect(path.getAttribute('class')).to.include('erm-connection');
-        expect(path.getAttribute('class')).to.include('erm-association');
     }));
 
     it('should render labels', inject(function (elementRegistry) {

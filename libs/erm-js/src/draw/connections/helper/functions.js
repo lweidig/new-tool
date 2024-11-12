@@ -27,6 +27,30 @@ export function addConnectionClasses(element, connection) {
     svgClasses(element).add(`erm-${lowerCaseTypeWithoutNamespace(type)}`);
 }
 
+/**
+ * Move a point towards another point by a distance equal to distance.
+ * @param {Object} point - The point to move.
+ * @param {Object} referencePoint - The reference point to move towards.
+ * @param {number} distance - The distance to move toward from point toward referencePoint.
+ * @returns {Object} The new point moved towards the target.
+ */
+export function calculatePointOnLine(point, referencePoint, distance) {
+    const vector = {
+        x: referencePoint.x - point.x,
+        y: referencePoint.y - point.y,
+    };
+    const length = Math.sqrt(vector.x ** 2 + vector.y ** 2);
+    const normalizedVector = {
+        x: vector.x / length,
+        y: vector.y / length,
+    };
+
+    return {
+        x: point.x + normalizedVector.x * distance,
+        y: point.y + normalizedVector.y * distance,
+    };
+}
+
 function calculateOptimalConnectionPoints(
     sourceElement,
     targetElement,
@@ -60,16 +84,18 @@ function calculateOptimalConnectionPoints(
     });
 
     if (circularSource) {
-        optimalPoints.source = postProcessPoint(
+        optimalPoints.source = calculatePointOnLine(
             optimalPoints.source,
             optimalPoints.target,
+            GENERALIZATION_RADIUS,
         );
     }
 
     if (circularTarget) {
-        optimalPoints.target = postProcessPoint(
+        optimalPoints.target = calculatePointOnLine(
             optimalPoints.target,
             optimalPoints.source,
+            GENERALIZATION_RADIUS,
         );
     }
 
@@ -115,27 +141,4 @@ function getConnectionPoint(element, preferredConnectionPoint) {
                 `Unknown preferred connection point: ${preferredConnectionPoint}`,
             );
     }
-}
-
-/**
- * Move a point towards another point by a distance equal to GENERALIZATION_RADIUS.
- * @param {Object} point - The point to move.
- * @param {Object} referencePoint - The reference point to move towards.
- * @returns {Object} The new point moved towards the target.
- */
-function postProcessPoint(point, referencePoint) {
-    const vector = {
-        x: referencePoint.x - point.x,
-        y: referencePoint.y - point.y,
-    };
-    const length = Math.sqrt(vector.x ** 2 + vector.y ** 2);
-    const normalizedVector = {
-        x: vector.x / length,
-        y: vector.y / length,
-    };
-
-    return {
-        x: point.x + normalizedVector.x * GENERALIZATION_RADIUS,
-        y: point.y + normalizedVector.y * GENERALIZATION_RADIUS,
-    };
 }

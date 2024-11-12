@@ -54,7 +54,7 @@ describe('import - ErmImporter', function () {
                 expect(events[1].name).to.equal('Product');
                 expect(events[2].name).to.equal('buys');
                 expect(events[3].name).to.equal('Customer -> buys');
-                expect(events[4].name).to.equal('buys -> Product');
+                expect(events[4].name).to.equal('Product -> buys');
 
                 const elementRegistry = diagram.get('elementRegistry');
                 expect(elementRegistry.get('entity1')).to.exist;

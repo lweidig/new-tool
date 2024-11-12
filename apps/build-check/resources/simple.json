@@ -28,8 +28,8 @@
         {
             "$type": "erm:Association",
             "id": "association2",
-            "sourceRef": "relationship1",
-            "targetRef": "entity2"
+            "sourceRef": "entity2",
+            "targetRef": "relationship1"
         }
     ]
 }

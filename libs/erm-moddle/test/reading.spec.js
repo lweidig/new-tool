@@ -44,7 +44,7 @@ describe('erm-moddle reading', function () {
         expect(result).to.exist;
         expect(result.$type).to.equal('erm:Root');
         expect(result.cells).to.be.an('array');
-        expect(result.cells).to.have.length(14);
+        expect(result.cells).to.have.length(15);
 
         // Prüfe spezifische Elementtypen
         const elementTypes = result.cells.reduce((types, cell) => {
@@ -59,9 +59,9 @@ describe('erm-moddle reading', function () {
         expect(elementTypes['erm:OverlappingGeneralization']).to.equal(1);
         expect(elementTypes['erm:Comment']).to.equal(1);
         expect(elementTypes['erm:Constraint']).to.equal(1);
-        expect(elementTypes['erm:Association']).to.equal(4);
+        expect(elementTypes['erm:Association']).to.equal(2);
         expect(elementTypes['erm:NoteLink']).to.equal(1);
-        expect(elementTypes['erm:SubsetLink']).to.equal(1);
+        expect(elementTypes['erm:SubsetLink']).to.equal(3);
 
         // Prüfe Person Entity und seine Attribute
         const personEntity = result.cells.find(

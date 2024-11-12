@@ -150,14 +150,24 @@
             "properties": [
                 {
                     "name": "sourceRef",
-                    "type": "ErmElement",
+                    "type": "Entity",
                     "isReference": true,
                     "isAttr": true
                 },
                 {
                     "name": "targetRef",
-                    "type": "ErmElement",
+                    "type": "Relationship",
                     "isReference": true,
+                    "isAttr": true
+                },
+                {
+                    "name": "minCardinality",
+                    "type": "String",
+                    "isAttr": true
+                },
+                {
+                    "name": "maxCardinality",
+                    "type": "String",
                     "isAttr": true
                 }
             ]

@@ -91,13 +91,17 @@
             "$type": "erm:Association",
             "id": "assoc1",
             "sourceRef": "person",
-            "targetRef": "employment"
+            "targetRef": "employment",
+            "minCardinality": "1",
+            "maxCardinality": "1"
         },
         {
             "$type": "erm:Association",
             "id": "assoc2",
-            "sourceRef": "employment",
-            "targetRef": "employee"
+            "sourceRef": "employee",
+            "targetRef": "employment",
+            "minCardinality": "0",
+            "maxCardinality": "*"
         },
         {
             "$type": "erm:NoteLink",

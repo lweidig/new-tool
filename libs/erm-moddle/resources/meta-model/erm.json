@@ -32,8 +32,34 @@
             ]
         },
         {
-            "name": "ErmMetaElement",
+            "name": "PositionedElement",
             "superClass": ["BaseElement"],
+            "properties": [
+                {
+                    "name": "x",
+                    "type": "Number",
+                    "isAttr": true
+                },
+                {
+                    "name": "y",
+                    "type": "Number",
+                    "isAttr": true
+                },
+                {
+                    "name": "width",
+                    "type": "Number",
+                    "isAttr": true
+                },
+                {
+                    "name": "height",
+                    "type": "Number",
+                    "isAttr": true
+                }
+            ]
+        },
+        {
+            "name": "ErmMetaElement",
+            "superClass": ["PositionedElement"],
             "properties": []
         },
         {
@@ -43,7 +69,7 @@
         },
         {
             "name": "ErmElement",
-            "superClass": ["BaseElement"],
+            "superClass": ["PositionedElement"],
             "properties": []
         },
         {
@@ -184,7 +210,7 @@
                 },
                 {
                     "name": "targetRef",
-                    "type": "BaseElement",
+                    "type": "PositionedElement",
                     "isReference": true,
                     "isAttr": true
                 }

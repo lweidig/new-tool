@@ -6,10 +6,10 @@ import { createModdle, readFile } from './helper.js';
 
 chai.use(chaiAsPromised);
 
-describe('erm-moddle reading', function () {
+describe('erm-moddle - reading', () => {
     const moddle = createModdle();
 
-    it('should read empty root element', async function () {
+    it('should read empty root element', async () => {
         const jsonString = JSON.stringify({ $type: 'erm:Root' });
 
         const result = await moddle.fromJson(jsonString);
@@ -20,23 +20,39 @@ describe('erm-moddle reading', function () {
         expect(result.cells).to.have.length(0);
     });
 
-    it('should read simple example json', async function () {
+    it('should read simple example json', async () => {
         const jsonString = readFile('./test/resources/simple.json');
 
         const result = await moddle.fromJson(jsonString);
 
         expect(result).to.exist;
         expect(result.$type).to.equal('erm:Root');
+
         expect(result.cells).to.be.an('array');
         expect(result.cells).to.have.length(5);
+
         expect(result.cells[0].$type).to.equal('erm:Entity');
         expect(result.cells[0].name).to.equal('Customer');
+
+        expect(result.cells[1].$type).to.equal('erm:Entity');
+        expect(result.cells[1].name).to.equal('Product');
+
+        expect(result.cells[2].$type).to.equal('erm:Relationship');
+        expect(result.cells[2].name).to.equal('buys');
+
+        expect(result.cells[3].$type).to.equal('erm:Association');
+        expect(result.cells[3].sourceRef).to.equal('entity1');
+        expect(result.cells[3].targetRef).to.equal('relationship1');
+
+        expect(result.cells[4].$type).to.equal('erm:Association');
+        expect(result.cells[4].sourceRef).to.equal('entity2');
+        expect(result.cells[4].targetRef).to.equal('relationship1');
         for (const cell of result.cells) {
             expect(cell.$instanceOf('erm:BaseElement')).to.be.true;
         }
     });
 
-    it('should read complete example json', async function () {
+    it('should read complete example json', async () => {
         const jsonString = readFile('./test/resources/complete.json');
         const result = await moddle.fromJson(jsonString);
 
@@ -84,7 +100,7 @@ describe('erm-moddle reading', function () {
         }
     });
 
-    it('should return best effort instance when one element is missing its $type attribute', async function () {
+    it('should return best effort instance when one element is missing its $type attribute', async () => {
         const jsonString = readFile(
             './test/resources/simple_with_cell_missing_type.json',
         );
@@ -97,7 +113,7 @@ describe('erm-moddle reading', function () {
         expect(result.cells[3].id).to.equal('association2');
     });
 
-    it('should reject json without root element', async function () {
+    it('should reject json without root element', async () => {
         const jsonString = readFile(
             './test/resources/simple_without_root.json',
         );
@@ -113,7 +129,7 @@ describe('erm-moddle reading', function () {
         );
     });
 
-    it('should reject not parseable string', async function () {
+    it('should reject not parseable string', async () => {
         const jsonString = 'invalid json';
 
         const moddleFromInvalidJson = () => moddle.fromJson(jsonString);

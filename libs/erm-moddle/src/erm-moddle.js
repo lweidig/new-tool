@@ -49,6 +49,65 @@ ErmModdle.prototype.fromJson = function (jsonString) {
     }
 };
 
+/**
+ * Export the current state of the provided Moddle instance to a JSON string.
+ *
+ * @param {Object} modelInstance - The model instance to export
+ * @returns {Promise<String>} A promise that resolves with the provided
+ * instance's JSON representation or rejects with an TypeError in case
+ * translation to JSON fails unexpectedly.
+ */
+ErmModdle.prototype.toJson = function (modelInstance) {
+    try {
+        const modelInstanceWithEnumerableRefs = getCloneWithEnumerableProps(
+            modelInstance,
+            ['sourceRef', 'targetRef'],
+        );
+        const json = JSON.stringify(modelInstanceWithEnumerableRefs);
+        return Promise.resolve(json);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
 function mapNotNull(array, transform) {
     return array.map(transform).filter((item) => item != null);
+}
+
+function getCloneWithEnumerableProps(obj, propertiesToMakeEnumerable) {
+    if (obj === null || typeof obj !== 'object') {
+        return obj;
+    }
+
+    if (Array.isArray(obj)) {
+        return obj.map((item) =>
+            getCloneWithEnumerableProps(item, propertiesToMakeEnumerable),
+        );
+    }
+
+    const allProperties = [
+        ...Object.getOwnPropertyNames(obj),
+        ...Object.getOwnPropertySymbols(obj),
+    ];
+
+    const clone = Object.create(Object.getPrototypeOf(obj));
+
+    allProperties.forEach((prop) => {
+        const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+
+        if (propertiesToMakeEnumerable.includes(prop.toString())) {
+            descriptor.enumerable = true;
+        }
+
+        if (descriptor.value && typeof descriptor.value === 'object') {
+            descriptor.value = getCloneWithEnumerableProps(
+                descriptor.value,
+                propertiesToMakeEnumerable,
+            );
+        }
+
+        Object.defineProperty(clone, prop, descriptor);
+    });
+
+    return clone;
 }

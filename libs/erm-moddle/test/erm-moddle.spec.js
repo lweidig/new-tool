@@ -2,11 +2,11 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { createModdle } from './helper.js';
 
-describe('erm-moddle', function () {
+describe('erm-moddle - base functionality', () => {
     const moddle = createModdle();
 
-    describe('moddle schema parsing', function () {
-        it('should expose erm-moddle types and descriptors', function () {
+    describe('moddle schema parsing', () => {
+        it('should expose erm-moddle types and descriptors', () => {
             const ermTypes = [
                 'Root',
                 'BaseElement',
@@ -41,20 +41,20 @@ describe('erm-moddle', function () {
         });
     });
 
-    describe('creation', function () {
-        it('should create Entity', function () {
+    describe('creation', () => {
+        it('should create Entity', () => {
             const entity = moddle.create('erm:Entity');
 
             expect(entity.$type).to.eql('erm:Entity');
         });
 
-        it('should create Relationship', function () {
+        it('should create Relationship', () => {
             const relationship = moddle.create('erm:Relationship');
 
             expect(relationship.$type).to.eql('erm:Relationship');
         });
 
-        it('should create Attributes inside Entity', function () {
+        it('should create Attributes inside Entity', () => {
             const zipCode = moddle.create('erm:Attribute');
             const city = moddle.create('erm:Attribute');
             const address = moddle.create('erm:Entity', {
@@ -66,32 +66,32 @@ describe('erm-moddle', function () {
             expect(address.attributes).to.eql([zipCode, city]);
         });
 
-        it('should create Comment', function () {
+        it('should create Comment', () => {
             const comment = moddle.create('erm:Comment');
 
             expect(comment.$type).to.eql('erm:Comment');
         });
 
-        it('should create Constraint', function () {
+        it('should create Constraint', () => {
             const constraint = moddle.create('erm:Constraint');
 
             expect(constraint.$type).to.eql('erm:Constraint');
         });
 
-        it('should create Generalization', function () {
+        it('should create Generalization', () => {
             const generalization = moddle.create('erm:Generalization');
 
             expect(generalization.$type).to.eql('erm:Generalization');
         });
 
-        it('should create DisjunctGeneralization', function () {
+        it('should create DisjunctGeneralization', () => {
             const generalization = moddle.create('erm:DisjunctGeneralization');
 
             expect(generalization.$type).to.eql('erm:DisjunctGeneralization');
             expect(generalization.$instanceOf('erm:Generalization')).to.be.true;
         });
 
-        it('should create OverlappingGeneralization', function () {
+        it('should create OverlappingGeneralization', () => {
             const generalization = moddle.create(
                 'erm:OverlappingGeneralization',
             );
@@ -102,47 +102,47 @@ describe('erm-moddle', function () {
             expect(generalization.$instanceOf('erm:Generalization')).to.be.true;
         });
 
-        it('should create Association', function () {
+        it('should create Association', () => {
             const generalization = moddle.create('erm:Association');
 
             expect(generalization.$type).to.eql('erm:Association');
             expect(generalization.$instanceOf('erm:ErmMetaLink')).to.be.true;
         });
 
-        it('should create NoteLink', function () {
+        it('should create NoteLink', () => {
             const generalization = moddle.create('erm:NoteLink');
 
             expect(generalization.$type).to.eql('erm:NoteLink');
             expect(generalization.$instanceOf('erm:ErmMetaLink')).to.be.true;
         });
 
-        it('should create SubsetLink', function () {
+        it('should create SubsetLink', () => {
             const generalization = moddle.create('erm:SubsetLink');
 
             expect(generalization.$type).to.eql('erm:SubsetLink');
             expect(generalization.$instanceOf('erm:ErmMetaLink')).to.be.true;
         });
 
-        describe('default values after initialization', function () {
-            it('should init Entity', function () {
+        describe('default values after initialization', () => {
+            it('should init Entity', () => {
                 const entity = moddle.create('erm:Entity');
 
                 expect(entity.name).to.eql('<Identifier>');
             });
 
-            it('should init Relationship', function () {
+            it('should init Relationship', () => {
                 const relationship = moddle.create('erm:Relationship');
 
                 expect(relationship.name).to.eql('<Name>');
             });
 
-            it('should init Attribute', function () {
+            it('should init Attribute', () => {
                 const attribute = moddle.create('erm:Attribute');
 
                 expect(attribute.name).to.eql('<Name>');
             });
 
-            it('should init Comment', function () {
+            it('should init Comment', () => {
                 const comment = moddle.create('erm:Comment');
 
                 expect(comment.textContent).to.eql('<Comment>');
@@ -150,8 +150,8 @@ describe('erm-moddle', function () {
         });
     });
 
-    describe('getting and setting properties', function () {
-        it('should set id attribute', function () {
+    describe('getting and setting properties', () => {
+        it('should set id attribute', () => {
             const comment = moddle.create('erm:Comment');
             expect(comment.get('id')).not.to.exist;
             comment.set('id', '1');
@@ -159,7 +159,7 @@ describe('erm-moddle', function () {
             expect(comment).to.deep.include({ id: '1' });
         });
 
-        it('should set enumerable dataType property on Attribute', function () {
+        it('should set enumerable dataType property on Attribute', () => {
             const attribute = moddle.create('erm:Attribute');
             expect(attribute.get('dataType')).not.to.exist;
             attribute.set('dataType', 'Timestamp');
@@ -168,8 +168,8 @@ describe('erm-moddle', function () {
         });
     });
 
-    describe('building hierarchies', function () {
-        it('should create simple hierarchy', function () {
+    describe('building hierarchies', () => {
+        it('should create simple hierarchy', () => {
             const root = moddle.create('erm:Root');
             const cells = root.get('erm:cells');
             const artistEntity = moddle.create('erm:Entity');

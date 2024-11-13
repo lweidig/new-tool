@@ -57,6 +57,7 @@ export function importErmDiagram(targetDiagram, ermRoot) {
         canvas = targetDiagram.get('canvas');
         eventBus.fire('import.render.start', { definitions: ermRoot });
         render(ermRoot);
+
         eventBus.fire('import.render.complete', { warnings: warnings });
         return Promise.resolve({ warnings: warnings });
     } catch (e) {
@@ -87,6 +88,13 @@ function renderShapes(renderParams) {
     }
     shapes.forEach((shape, index) => {
         const angle = (index / shapes.length) * 2 * Math.PI;
+
+        shape.x = shape.x || middleX + radius * Math.cos(angle) - 50;
+        shape.y = shape.y || middleY + radius * Math.sin(angle) - 40;
+        shape.width = shape.width || calculateWidth(shape);
+        shape.height = shape.height || calculateHeight(shape);
+        shape.name = shape.name || shape.$type;
+
         const newShape = elementFactory.createShape({
             id: shape.id,
             type: shape.$type,

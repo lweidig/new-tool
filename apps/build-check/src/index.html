@@ -11,17 +11,37 @@
             #viewer-container > div {
                 height: 100%;
             }
+
+            #action-container {
+                display: flex;
+            }
+
             #json-selector {
                 background-color: #98b06f;
-                margin: 20px auto;
+                margin: 20px;
                 text-align: center;
                 justify-content: center;
-                max-width: 50%;
+                width: 80%;
                 height: 40px;
             }
+
             #json-select {
                 margin-top: 10px;
             }
+
+            #action-bar {
+                background-color: #98b06f;
+                margin: 20px;
+                text-align: center;
+                justify-content: center;
+                width: 20%;
+                height: 40px;
+            }
+
+            #json-export-button {
+                margin-top: 10px;
+            }
+
             #viewer-container {
                 width: 99%;
                 height: 85%;
@@ -33,16 +53,22 @@
         <link rel="stylesheet" href="styles/erm-js.css" />
     </head>
     <body>
-        <div id="json-selector">
-            <label for="json-select"
-                >Choose an ERM diagram file to get started:</label
-            >
-            <select id="json-select">
-                <% htmlWebpackPlugin.options.jsonFiles.forEach(function(file) {
-                %>
-                <option value="<%= file %>"><%= file %></option>
-                <% }); %>
-            </select>
+        <div id="action-container">
+            <div id="json-selector">
+                <label for="json-select"
+                    >Choose an ERM diagram file to get started:</label
+                >
+                <select id="json-select">
+                    <%
+                    htmlWebpackPlugin.options.jsonFiles.forEach(function(file) {
+                    %>
+                    <option value="<%= file %>"><%= file %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div id="action-bar">
+                <button id="json-export-button">export Json</button>
+            </div>
         </div>
         <div id="viewer-container"></div>
     </body>

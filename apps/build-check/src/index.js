@@ -34,3 +34,37 @@ document.addEventListener('DOMContentLoaded', () => {
         loadAndRenderDiagram(selectElement.options[0].value);
     }
 });
+
+const exportJsonButton = document.getElementById('json-export-button');
+exportJsonButton.addEventListener('click', async () => {
+    try {
+        // Exportiere das Diagramm als JSON
+        const jsonData = await viewer.saveJson();
+
+        // Erstelle einen Blob aus den JSON Daten
+        const blob = new Blob([jsonData], {
+            type: 'application/json',
+        });
+
+        // Erstelle einen Download Link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+
+        // Setze den Dateinamen
+        const fileName = 'diagram-export.json';
+        a.href = url;
+        a.download = fileName;
+
+        // Füge den Link zum Dokument hinzu und klicke ihn programmatisch
+        document.body.appendChild(a);
+        a.click();
+
+        // Cleanup
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        console.log('Export erfolgreich!');
+    } catch (err) {
+        console.error('Fehler beim Export:', err);
+    }
+});

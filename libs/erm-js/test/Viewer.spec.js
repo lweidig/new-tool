@@ -20,7 +20,31 @@ describe('Viewer', function () {
 
             const json = await viewer.saveJson();
 
-            expect(json).to.deep.equal(diagram);
+            const inputParsed = JSON.parse(diagram);
+            const exportedParsed = JSON.parse(json);
+
+            inputParsed.cells.forEach((inputCell, index) => {
+                const exportedCell = exportedParsed.cells[index];
+                expect(exportedCell.id).to.equal(inputCell.id);
+                expect(exportedCell.$type).to.equal(inputCell.$type);
+                expect(exportedCell.name).to.equal(inputCell.name);
+                if (
+                    [
+                        'erm:Comment',
+                        'erm:Constraint',
+                        'erm:Entity',
+                        'erm:Relationship',
+                        'erm:Generalization',
+                        'erm:DisjunctGeneralization',
+                        'erm:OverlappingGeneralization',
+                    ].includes(exportedCell.$type)
+                ) {
+                    expect(exportedCell.x).to.be.a('number');
+                    expect(exportedCell.y).to.be.a('number');
+                    expect(exportedCell.width).to.be.a('number');
+                    expect(exportedCell.height).to.be.a('number');
+                }
+            });
         });
 
         it('should emit <saveJson.*> events', async () => {

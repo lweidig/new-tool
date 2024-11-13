@@ -139,43 +139,33 @@ BaseViewer.prototype.open = async function open() {
  *   * saveJson.serialized (after json generation)
  *   * saveJson.done (everything done)
  */
-BaseViewer.prototype.saveJson = async function saveJson(options) {
-    options = options || {};
+BaseViewer.prototype.saveJson = async function saveJson() {
+    const erDiagramSpecification = this.getErDiagramSpecification();
+    this._emit('saveJson.start', { root: erDiagramSpecification });
 
-    let definitions = this._definitions,
-        error,
-        json;
+    let json;
+    let error;
 
     try {
-        if (!definitions) {
-            throw new Error('no definitions loaded');
+        if (!erDiagramSpecification) {
+            throw new Error('no ERM instance loaded');
         }
-
-        definitions =
-            this._emit('saveJson.start', {
-                definitions,
-            }) || definitions;
-
-        const result = await this._moddle.toJson(definitions, options);
-        json = result.json;
-
-        json =
-            this._emit('saveJson.serialized', {
-                json,
-            }) || json;
+        json = await this._moddle.toJson(erDiagramSpecification);
+        this._emit('saveJson.serialized', { json: json });
     } catch (err) {
         error = err;
     }
 
-    const result = error ? { error } : { json };
-
-    this._emit('saveJson.done', result);
+    this._emit('saveJson.done', {
+        error: error,
+        json: json,
+    });
 
     if (error) {
         throw error;
     }
 
-    return result;
+    return json;
 };
 
 /**
@@ -246,7 +236,6 @@ BaseViewer.prototype.clear = function () {
     Diagram.prototype.clear.call(this);
 };
 
-/**
 /**
  * Destroy the viewer instance and clean up resources
  *

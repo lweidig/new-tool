@@ -1,7 +1,7 @@
 import coreModule from '../../src/core';
 import rendererModule from '../../src/draw';
-import { simple } from './draw.fixtures';
-import { bootstrapViewer, inject } from './helper';
+import { simple } from '../fixtures';
+import { bootstrapViewer, inject } from '../helper';
 
 import { query as domQuery } from 'min-dom';
 

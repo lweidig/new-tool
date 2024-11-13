@@ -8,7 +8,7 @@ import ErmModdle from '@new-tool/erm-moddle';
 import { importErmDiagram } from '../../src/import/ErmImporter';
 
 import CoreModule from '../../src/core';
-import { simple, root_without_cells } from './import.fixtures';
+import { simple, root_without_cells } from '../fixtures';
 
 describe('import - ErmImporter', function () {
     function createDiagram(container, modules) {

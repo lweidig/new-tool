@@ -4,11 +4,11 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>erm-js build check</title>
-        <style type="text/css">
+        <style>
             html,
             body,
-            #viewer-container,
-            #viewer-container > div {
+            #erm-js-container,
+            #erm-js-container > div {
                 height: 100%;
             }
 
@@ -16,33 +16,35 @@
                 display: flex;
             }
 
-            #json-selector {
+            #action-container > div {
                 background-color: #98b06f;
                 margin: 20px;
                 text-align: center;
                 justify-content: center;
-                width: 80%;
                 height: 40px;
             }
 
-            #json-select {
-                margin-top: 10px;
+            #component-bar {
+                width: 40%;
+            }
+
+            #json-selector {
+                width: 60%;
             }
 
             #action-bar {
-                background-color: #98b06f;
-                margin: 20px;
-                text-align: center;
-                justify-content: center;
                 width: 20%;
-                height: 40px;
+            }
+
+            select {
+                margin-top: 10px;
             }
 
             #json-export-button {
                 margin-top: 10px;
             }
 
-            #viewer-container {
+            #erm-js-container {
                 width: 99%;
                 height: 85%;
                 margin: 20px auto;
@@ -54,10 +56,26 @@
     </head>
     <body>
         <div id="action-container">
-            <div id="json-selector">
-                <label for="json-select"
-                    >Choose an ERM diagram file to get started:</label
+            <div id="component-bar">
+                <label for="component-select"
+                    >Choose an erm-js main component:</label
                 >
+                <select id="component-select">
+                    <optgroup label="Viewers">
+                        <option value="viewer">ER-Viewer</option>
+                        <option value="stepByStepViewer">
+                            Step-by-Step-ER-Viewer
+                        </option>
+                    </optgroup>
+                    <optgroup label="Editors">
+                        <option value="editor">ER-Editor</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div id="json-selector">
+                <label for="json-select">
+                    Choose an ERM diagram file to get started:
+                </label>
                 <select id="json-select">
                     <%
                     htmlWebpackPlugin.options.jsonFiles.forEach(function(file) {
@@ -70,6 +88,6 @@
                 <button id="json-export-button">export Json</button>
             </div>
         </div>
-        <div id="viewer-container"></div>
+        <div id="erm-js-container"></div>
     </body>
 </html>

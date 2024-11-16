@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "@new-tool/erm-moddle": "^1.0.0",
-        "diagram-js": "15.2.0"
+        "diagram-js": "15.2.2"
     },
     "babel": {
         "extends": "../../babel.config.json"
